@@ -1,0 +1,37 @@
+body {
+  background-color: #18458e !important;
+}
+
+#assetList {
+  margin-top: 50px;
+}
+
+#nav {
+  background-color: #2185d0;
+}
+
+.ui.active.dimmer {
+  opacity: .9;
+}
+
+#add {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: 0 0 20px black;
+}
+
+#add p {
+  font-size: 3.5rem;
+}
+
+#add:hover {
+  box-shadow: 0 0 10px black;
+}
+
+#add:hover > p{
+  color: #DDD
+}
