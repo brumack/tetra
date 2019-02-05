@@ -1,5 +1,20 @@
-body {
-  background-color: #18458e !important;
+#logo {
+  margin-top: .5rem;
+  font-family: 'Major Mono Display';
+}
+
+.ui.dimmer.modals.visible.active {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.ui.active.dimmer {
+  opacity: .095
+}
+
+.card .segment{
+  background-color: rgba(255, 255, 255, .8)
 }
 
 #assetList {
@@ -15,8 +30,8 @@ body {
 }
 
 #add {
-  height: 100px;
-  width: 100px;
+  height: 75px;
+  width: 75px;
   border-radius: 50%;
   display: block;
   margin: 0 auto;
@@ -25,7 +40,7 @@ body {
 }
 
 #add p {
-  font-size: 3.5rem;
+  font-size: 2.5rem;
 }
 
 #add:hover {

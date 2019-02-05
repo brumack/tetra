@@ -1,0 +1,20 @@
+.asset {
+  padding-bottom: .3rem;
+}
+
+.ui.grid>.row {
+  padding: .5rem 0;
+}
+
+.ui.large.header {
+  margin-bottom: .2rem;
+  font-family: 'Oswald'
+}
+
+.ui.segment {
+  background: rgba(255,255,255,.92)
+}
+
+.ui.grid>.row>.column.ticker {
+  padding-left: 0
+}

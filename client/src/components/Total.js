@@ -6,7 +6,7 @@ const Total = (props) => {
       <div className='card'>
         <div className='content'>
           <div className='ui segment'>
-            <div className='ui two column stackable grid'>
+            <div className='ui two column grid'>
               <div className='row'>
 
                 <div className='column'>

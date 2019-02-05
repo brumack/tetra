@@ -2,22 +2,22 @@ import React from 'react'
 import Asset from './Asset'
 import Total from './Total'
 import cc from '../apis/cc'
-import local from '../apis/local'
 import { Link } from 'react-router-dom'
 
 
 class List extends React.Component {
 
-  state = { allAssets: {}, userAssets: {}, values: {} }
-
-  componentDidMount() {
-    this.initialize()
+  state = {
+    allAssets: {},
+    userAssets: {},
+    values: {}
   }
 
-  initialize = async () => {
-    const allAssets = await local.get('/allAssets')
-    const userAssets = await local.get('/userAssets')
-    this.setState({ allAssets: allAssets.data, userAssets: userAssets.data })
+
+  componentDidMount = async () => {
+    const userAssets = await this.props.getUserAssets()
+    const allAssets = await this.props.getAllAssets()
+    this.setState({ userAssets, allAssets })
   }
 
   getPrice = async (asset) => {
@@ -25,34 +25,21 @@ class List extends React.Component {
     return response.data
   }
 
-  returnValue = (ticker, value) => {
-    const values = this.state.values
-    values[ticker] = value
-    this.setState({ values })
-  }
-
-  totalValue() {
-    const tickers = Object.keys(this.state.values)
-    if (tickers.length)
-      return tickers.map(ticker => this.state.values[ticker]).reduce((a, b) => a + b).toFixed(2)
-    return 0
-  }
-
   renderAssets = () => {
     return Object.keys(this.state.userAssets).map(asset => {
-      return < Asset key={asset}
-        name={asset}
-        quantity={this.state.userAssets[asset].quantity}
-        price={this.getPrice}
-        logo={'https://cryptocompare.com' + this.state.allAssets[asset].ImageUrl}
-        returnValue={this.returnValue}
-      />
+      return <Link to={`/details/${asset}`} key={asset}>
+        < Asset
+          name={asset}
+          quantity={this.state.userAssets[asset].quantity}
+          price={this.getPrice}
+          logo={'https://cryptocompare.com' + this.state.allAssets[asset].ImageUrl}
+        />
+      </Link>
     })
   }
 
   render() {
-    console.log(this.state)
-    if (this.state.allAssets && this.state.userAssets) {
+    if (this.state.userAssets && this.state.allAssets) {
       return (
         <div className='ui two column centered grid'>
           <div className='column'>
@@ -63,13 +50,13 @@ class List extends React.Component {
             </Link>
             <div className='ui relaxed list'>
               {this.renderAssets()}
-              <Total value={this.totalValue()} />
+              <Total value={0} />
             </div>
           </div>
         </div>
       )
     }
-    return 'loading'
+    return <div>loading...</div>
   }
 }
 

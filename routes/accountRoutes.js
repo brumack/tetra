@@ -3,12 +3,12 @@ const router = express.Router()
 const passport = require('passport')
 const User = require('../models/user')
 
-router.post(`/login`, passport.authenticate(`local`,
-  {
-    successRedirect: `/beaches`,
-    failureRedirect: `/login`
+router.post(`/login`, passport.authenticate(`local`)(req, res, () => {
+  res.end({
+    success: true,
+    message: 'User created'
   })
-)
+}))
 
 router.post('/signup', (req, res) => {
   const newUser = new User({ username: req.body.username })
@@ -29,5 +29,3 @@ router.post('/signup', (req, res) => {
     })
   })
 })
-
-module.exports = router

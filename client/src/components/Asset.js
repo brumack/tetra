@@ -1,4 +1,5 @@
 import React from 'react'
+import './Asset.css'
 
 class Asset extends React.Component {
 
@@ -6,10 +7,13 @@ class Asset extends React.Component {
 
   componentDidMount() {
     this.getValues()
-    setInterval(() => {
+    this.refresh = setInterval(() => {
       this.getValues()
-      this.props.returnValue(this.props.name, this.state.value)
     }, 5000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.refresh)
   }
 
   getValues = async () => {
@@ -17,7 +21,6 @@ class Asset extends React.Component {
     if (price.USD !== this.state.price) {
       this.setState({ price: price.USD })
       this.setState({ value: this.state.price * this.props.quantity })
-      this.props.returnValue(this.props.name, this.state.value)
     }
   }
 
@@ -27,19 +30,23 @@ class Asset extends React.Component {
         <div className='card'>
           <div className='content'>
             <div className='ui segment'>
-              <div className='ui two column stackable grid'>
+              <div className='ui three column grid'>
                 <div className='row'>
 
-                  <div className='column'>
-                    <img className='left floated mini ui image' src={this.props.logo} alt={this.props.name}></img>
-                    <div className='ui large header'>{this.props.name}</div>
-                    <div className='meta'>{this.props.quantity}</div>
+                  <div className='four wide center aligned column'>
+                    <img className='ui small image' src={this.props.logo} alt={this.props.name}></img>
                   </div>
 
-                  <div className='right aligned column'>
-                    <div className='ui large header'>${this.state.value.toFixed(2)}</div>
-                    <div className='meta' style={{ color: this.state.color }}>{`$${this.state.price}`}</div>
+                  <div className='six wide left aligned column ticker'>
+                    <div className='ui large header assetHeader'>{this.props.name}</div>
+                    <div className='meta'>{this.props.quantity} (${this.state.value.toFixed(2)})</div>
                   </div>
+
+                  <div className='six wide right aligned column'>
+                    <div className='ui large header'>${this.state.price}</div>
+                    <div className='meta'></div>
+                  </div>
+
                 </div>
               </div>
             </div>
