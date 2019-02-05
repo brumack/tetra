@@ -1,8 +1,8 @@
 // PACKAGE IMPORTS
-//const LocalStrategy = require('passport-local')
+// const LocalStrategy = require('passport-local')
 const bodyParser = require('body-parser')
 // const mongoose = require('mongoose')
-const passport = require('passport')
+// const passport = require('passport')
 const express = require('express')
 const app = express()
 
