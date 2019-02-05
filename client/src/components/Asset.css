@@ -11,7 +11,7 @@
   font-family: 'Oswald'
 }
 
-.ui.segment {
+.ui.segment.asset {
   background: rgba(255,255,255,.92)
 }
 
