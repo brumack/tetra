@@ -18,7 +18,7 @@ router.get('/userAssets', (req, res) => {
 })
 
 router.post('/userAssets', (req, res) => {
-  if (!assets[req.body.userAsset]) {
+  if (!assets[req.body.userAsset] && Object.keys(allAssetData).indexOf(req.body.userAsset) !== -1) {
     assets[req.body.userAsset] = { quantity: 0, trades: [] }
   }
   res.end()
