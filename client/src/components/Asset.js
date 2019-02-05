@@ -34,7 +34,7 @@ class Asset extends React.Component {
                 <div className='row'>
 
                   <div className='four wide center aligned column'>
-                    <img className='ui small image' src={this.props.logo} alt={this.props.name}></img>
+                    <img className='ui small circular image' src={this.props.logo} alt={this.props.name}></img>
                   </div>
 
                   <div className='six wide left aligned column ticker'>
