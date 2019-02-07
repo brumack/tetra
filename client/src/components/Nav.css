@@ -3,6 +3,10 @@
   font-family: 'Major Mono Display';
 }
 
+.right.menu .ui.item {
+  height: 100%
+}
+
 .ui.dimmer.modals.visible.active {
   position: fixed;
   top: 0;
@@ -11,10 +15,6 @@
 
 .ui.active.dimmer {
   opacity: .095
-}
-
-.card .segment{
-  background-color: rgba(255, 255, 255, .8)
 }
 
 #assetList {

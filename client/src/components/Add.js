@@ -1,30 +1,22 @@
 import React from 'react'
-import Modal from './Modal'
-import { Link, Redirect } from 'react-router-dom'
 
 class Add extends React.Component {
 
-  state = { newAsset: null, redirect: false }
+  state = { asset: null }
 
   handleChange = (e) => {
-    this.setState({ newAsset: e.target.value })
+    this.setState({ asset: e.target.value })
   }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    this.props.addUserAsset(this.state.newAsset)
-    this.setState({ redirect: true })
+    this.props.addAsset(this.state.asset)
   }
 
-  renderRedirect = () => {
-    if (this.state.redirect)
-      return <Redirect to='/' />
-  }
-
-  renderAddModal() {
+  render() {
+    console.log('add')
     return (
       <div className='ui grid'>
-        {this.renderRedirect()}
         <div className='row'>
           <div className='eight wide centered column'>
             <form className='ui form' onSubmit={this.handleSubmit}>
@@ -33,20 +25,10 @@ class Add extends React.Component {
                 <input type='text' name='name' placeholder='ticker' onChange={this.handleChange} />
               </div>
               <input type='submit' className='ui button' tabIndex='0' />
-              <Link to='/' >
-                <button className='ui red button'>Cancel</button>
-              </Link>
+              <button className='ui red button'>Cancel</button>
             </form>
           </div>
         </div>
-      </div>
-    )
-  }
-
-  render() {
-    return (
-      <div>
-        <Modal content={this.renderAddModal()} />
       </div>
     )
   }

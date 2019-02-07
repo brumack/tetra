@@ -1,9 +1,10 @@
 import React from 'react'
+import './Total.css'
 
 const Total = (props) => {
   return (
     <div className='item'>
-      <div className='card'>
+      <div id='total' className='card'>
         <div className='content'>
           <div className='ui segment'>
             <div className='ui two column grid'>

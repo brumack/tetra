@@ -1,5 +1,6 @@
 import React from 'react'
 import './Asset.css'
+import { getPrice } from '../utils/apiCalls'
 
 class Asset extends React.Component {
 
@@ -17,7 +18,7 @@ class Asset extends React.Component {
   }
 
   getValues = async () => {
-    const price = await this.props.price(this.props.name)
+    const price = await getPrice(this.props.name)
     if (price.USD !== this.state.price) {
       this.setState({ price: price.USD })
       this.setState({ value: this.state.price * this.props.quantity })

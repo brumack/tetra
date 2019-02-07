@@ -11,8 +11,8 @@
   font-family: 'Oswald'
 }
 
-.ui.segment.asset {
-  background: rgba(255,255,255,.92)
+.card .segment {
+  background-color: rgba(255, 255, 255, .9)
 }
 
 .ui.segment:hover {
