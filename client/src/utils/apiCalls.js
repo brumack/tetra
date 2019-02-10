@@ -12,7 +12,6 @@ export async function verify(token) {
 
 export async function login(credentials) {
   const response = await local.post(`/users/login`, credentials)
-  console.log(response.data)
   return response.data
 }
 

@@ -29,6 +29,7 @@ class Login extends React.Component {
     const values = this.state
     const response = await this.props.login(values)
     if (response.success) {
+      this.setState({ email: '', password: '' })
       this.props.handleClose()
     } else {
       this.setState({ errorMessage: response.message })

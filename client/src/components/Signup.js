@@ -68,8 +68,8 @@ class Signup extends React.Component {
   handleSubmit = async (e) => {
     const values = this.state
     const response = await this.props.signup(values)
-    console.log(response)
     if (response.success) {
+      this.setState({ email: '', password: '' })
       this.props.handleClose()
     } else {
       this.setState({ errorMessage: response.message })
