@@ -9,7 +9,6 @@ class Detail extends React.Component {
 
   componentDidMount = async () => {
     this.setState({ asset: this.props.asset })
-    console.log(this.props.asset)
   }
 
   render() {

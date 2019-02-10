@@ -1,22 +1,13 @@
 import React from 'react'
-import { Button, Modal, Form, Message } from 'semantic-ui-react'
+import { Button, Header, Modal, Form, Message } from 'semantic-ui-react'
 
-class Login extends React.Component {
+export default class Login extends React.Component {
 
   state = {
     email: '',
     password: '',
-    open: false,
+    showModal: false,
     errorMessage: null
-  }
-
-  componentWillReceiveProps(newProps) {
-    if (newProps.dimmer !== this.state.dimmer) {
-      this.setState({ dimmer: newProps.dimmer })
-    }
-    if (newProps.open !== this.state.open) {
-      this.setState({ open: newProps.open })
-    }
   }
 
   handleChange = (e) => {
@@ -26,56 +17,55 @@ class Login extends React.Component {
   }
 
   handleSubmit = async (e) => {
+    e.preventDefault()
     const values = this.state
     const response = await this.props.login(values)
     if (response.success) {
-      this.setState({ email: '', password: '' })
-      this.props.handleClose()
+      this.closeModal()
     } else {
       this.setState({ errorMessage: response.message })
     }
   }
 
-  handleClose() {
-    this.setState({ email: '', password: '', errorMessage: '' })
-  }
-
   handleError = () => {
     if (this.state.errorMessage) {
-      return (
-        <Message
-          error
-          content={this.state.errorMessage}
-        />
-      )
+      return <Message error content={this.state.errorMessage} />
     }
   }
 
+  closeModal = () => {
+    this.setState({
+      email: '',
+      password: '',
+      showModal: false
+    })
+  }
+
   render() {
-    const { open, dimmer } = this.state
+    const { email, password, showModal } = this.state
     return (
-      <Modal size='mini' dimmer={dimmer} open={open} onUnmount={() => this.handleClose()}>
-        <Modal.Header>Log In</Modal.Header>
+      <Modal trigger={<Button onClick={() => this.setState({ showModal: true })}>Login</Button>}
+        onClose={this.closeModal}
+        open={showModal}
+        closeIcon>
+        <Header icon='archive' content='Login' />
         <Modal.Content>
           {this.handleError()}
           <Form>
             <Form.Field>
               <label>Email</label>
-              <input type='text' name='email' value={this.state.email} onChange={this.handleChange} />
+              <input type='text' name='email' value={email} onChange={this.handleChange} />
             </Form.Field>
             <Form.Field>
               <label>Password</label>
-              <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+              <input type='password' name='password' value={password} onChange={this.handleChange} />
             </Form.Field>
+            <Button color='red' content="Cancel" onClick={this.closeModal} />
+            <Button positive content="Submit" onClick={this.handleSubmit} />
           </Form>
         </Modal.Content>
-        <Modal.Actions>
-          <Button color='red' content="Cancel" onClick={this.props.handleClose} />
-          <Button positive content="Submit" onClick={this.handleSubmit} />
-        </Modal.Actions>
       </Modal>
     )
   }
 }
 
-export default Login

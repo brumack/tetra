@@ -101,7 +101,7 @@ class App extends React.Component {
 
   renderWelcome() {
     if (!this.state.token) {
-      return <Welcome token={this.state.token} />
+      return <Welcome token={this.state.token} signup={this.signup} login={this.login} />
     }
   }
 

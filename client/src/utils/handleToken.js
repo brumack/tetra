@@ -21,7 +21,6 @@ export function storeToken(obj) {
   }
 
   try {
-    console.log(obj)
     localStorage.setItem('TETRA', JSON.stringify(obj))
   } catch (e) {
     console.err(e)
