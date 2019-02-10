@@ -41,10 +41,6 @@
   border-radius: 0;
 }
 
-.ui.segment:hover {
-  background: rgba(61, 70, 107)
-}
-
 .ui.grid>.row>.column.ticker {
   padding-left: 0
 }
@@ -53,5 +49,17 @@
   .ui.stackable.grid>.column:not(.row),
   .ui.stackable.grid>.wide.column {
     padding: .25rem 1rem !important;
+  }
+}
+
+
+@media only screen and (min-width: 767px) {
+  .ui.stackable.grid>.column:not(.row),
+  .ui.stackable.grid>.wide.column {
+    padding: .25rem 1rem !important;
+  }
+
+  .ui.segment:hover {
+    background: rgba(61, 70, 107)
   }
 }
