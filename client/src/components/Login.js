@@ -23,7 +23,7 @@ export default class Login extends React.Component {
     if (response.success) {
       this.closeModal()
     } else {
-      this.setState({ errorMessage: response.message })
+      this.setState({ errorMessage: response.message, email: '', password: '' })
     }
   }
 

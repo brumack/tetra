@@ -41,7 +41,7 @@ export default class Signup extends React.Component {
     } else {
       this.submit()
     }
-    this.setState({ errorMessage })
+    this.setState({ email: '', password: '', veirfyPassword: '' })
   }
 
   handleError = () => {
