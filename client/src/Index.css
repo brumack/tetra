@@ -4,6 +4,7 @@ body {
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-attachment: fixed !important;
+  overflow-x: hidden
 }
 
 
