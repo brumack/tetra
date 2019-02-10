@@ -48,7 +48,7 @@ export default class Login extends React.Component {
         onClose={this.closeModal}
         open={showModal}
         closeIcon>
-        <Header icon='archive' content='Login' />
+        <Header icon='bitcoin' content='Login' />
         <Modal.Content>
           {this.handleError()}
           <Form>

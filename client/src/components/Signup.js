@@ -69,7 +69,7 @@ export default class Signup extends React.Component {
         onClose={this.closeModal}
         open={showModal}
         closeIcon>
-        <Header icon='archive' content='Sign up!' />
+        <Header icon='lilne graph' content='Sign up!' />
         <Modal.Content>
           {this.handleError()}
           <Form>
