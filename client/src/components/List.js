@@ -34,19 +34,34 @@ class List extends React.Component {
 
   handleClose = () => this.setState({ open: false })
 
-  renderAssets = () => {
+  renderAssets = (format) => {
 
-    return this.props.userAssets.map((asset, idx) => {
-      return <Asset
-        key={asset.asset}
-        name={asset.asset}
-        quantity={asset.quantity}
-        price={this.getPrice}
-        logo={'https://cryptocompare.com' + this.props.allAssets[asset.asset].ImageUrl}
-        onClick={this.handleDetail}
-        returnValue={this.returnValue}
-      />
-    })
+    if (format === 'mobile') {
+      return (
+        <Asset
+          key={asset.asset}
+          name={asset.asset}
+          quantity={asset.quantity}
+          price={this.getPrice}
+          logo={'https://cryptocompare.com' + this.props.allAssets[asset.asset].ImageUrl}
+          ontouchend={this.handleDetail}
+          returnValue={this.returnValue}
+        />
+      )
+    } else {
+
+      return this.props.userAssets.map((asset, idx) => {
+        return <Asset
+          key={asset.asset}
+          name={asset.asset}
+          quantity={asset.quantity}
+          price={this.getPrice}
+          logo={'https://cryptocompare.com' + this.props.allAssets[asset.asset].ImageUrl}
+          onClick={this.handleDetail}
+          returnValue={this.returnValue}
+        />
+      })
+    }
   }
 
   render() {
@@ -73,7 +88,7 @@ class List extends React.Component {
             <Grid.Column width={10}>
               <Container>
                 <Grid stackable columns={1} id='assetList'>
-                  {this.renderAssets()}
+                  {this.renderAssets('desktop')}
                 </Grid>
               </Container>
             </Grid.Column>
@@ -93,7 +108,7 @@ class List extends React.Component {
             <Grid.Column only='mobile' width={16}>
               <Container>
                 <Grid stackable columns={1} id='assetList'>
-                  {this.renderAssets()}
+                  {this.renderAssets('mobile')}
                 </Grid>
               </Container>
             </Grid.Column>

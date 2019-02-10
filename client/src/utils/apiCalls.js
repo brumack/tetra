@@ -25,7 +25,7 @@ export async function logout(token) {
   if (response.data.success) {
     return { token: null, userAssets: null }
   } else {
-    return {}
+    console.log('error')
   }
 }
 
