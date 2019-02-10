@@ -34,14 +34,16 @@ export default class Signup extends React.Component {
     let errorMessage = null
     if (!validEmail) {
       errorMessage = 'Invalid email address.'
+      this.setState({ email: '', password: '', verifyPassword: '' })
     } else if (password.length < 8) {
       errorMessage = 'Invalid password. Password must be 8 characters or longer.'
+      this.setState({ password: '', verifyPassword: '' })
     } else if (password !== verifyPassword) {
       errorMessage = 'Passwords do not match.'
+      this.setState({ email: '', password: '', verifyPassword: '' })
     } else {
       this.submit()
     }
-    this.setState({ email: '', password: '', veirfyPassword: '' })
   }
 
   handleError = () => {
