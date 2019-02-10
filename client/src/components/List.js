@@ -37,17 +37,19 @@ class List extends React.Component {
   renderAssets = (format) => {
 
     if (format === 'mobile') {
-      return (
-        <Asset
-          key={asset.asset}
-          name={asset.asset}
-          quantity={asset.quantity}
-          price={this.getPrice}
-          logo={'https://cryptocompare.com' + this.props.allAssets[asset.asset].ImageUrl}
-          ontouchend={this.handleDetail}
-          returnValue={this.returnValue}
-        />
-      )
+      return this.props.userAssets.map((asset, idx) => {
+        return (
+          <Asset
+            key={asset.asset}
+            name={asset.asset}
+            quantity={asset.quantity}
+            price={this.getPrice}
+            logo={'https://cryptocompare.com' + this.props.allAssets[asset.asset].ImageUrl}
+            ontouchend={this.handleDetail}
+            returnValue={this.returnValue}
+          />
+        )
+      })
     } else {
 
       return this.props.userAssets.map((asset, idx) => {
