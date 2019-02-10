@@ -7,8 +7,8 @@
   font-family: 'Roboto';
 }
 
-.right.menu .ui.item {
-  height: 100%
+.right.item {
+  margin-left: 0;
 }
 
 #assetList {
@@ -17,6 +17,10 @@
 
 #nav {
   background-color: #2185d0;
+}
+
+.ui.secondary.menu .item {
+  padding-right: 0 
 }
 
 /* Major+Mono+Display|Oswald|Anton|Roboto:100 */

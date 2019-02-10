@@ -20,7 +20,7 @@ class List extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.token != this.state.token) {
+    if (newProps.token !== this.state.token) {
       this.setState({ token: this.props.token })
     }
   }

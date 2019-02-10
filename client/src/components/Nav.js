@@ -1,5 +1,5 @@
 import React from 'react'
-import { Menu, Image, Item, Button, Header } from 'semantic-ui-react'
+import { Menu, Image, Item, Button, Header, Dropdown } from 'semantic-ui-react'
 import Signup from './Signup'
 import Login from './Login'
 import '../css/Nav.css'
@@ -34,7 +34,6 @@ class Nav extends React.Component {
     if (this.props.token) {
       return (
         <Menu.Item>
-          <Header id='greeting' size='small'>Hi {this.props.email}!</Header>
           <Item>
             <Button color='black' onClick={this.props.logout}>Log out</Button>
           </Item>
@@ -42,11 +41,10 @@ class Nav extends React.Component {
       )
     } else {
       return (
-        <Menu.Item>
+        <Menu.Item position='right'>
           <Item>
             <Button.Group>
               <Button color='black' onClick={() => this.setState({ login: true })}>Login</Button>
-              <Button.Or text='or' />
               <Button color='grey' onClick={() => this.setState({ signUp: true })}>Sign Up!</Button>
             </Button.Group>
           </Item>
