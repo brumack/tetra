@@ -51,7 +51,6 @@ class List extends React.Component {
         )
       })
     } else {
-
       return this.props.userAssets.map((asset, idx) => {
         return <Asset
           key={asset.asset}
