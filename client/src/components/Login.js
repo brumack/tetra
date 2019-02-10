@@ -36,6 +36,10 @@ class Login extends React.Component {
     }
   }
 
+  handleClose() {
+    this.setState({ email: '', password: '', errorMessage: '' })
+  }
+
   handleError = () => {
     if (this.state.errorMessage) {
       return (
@@ -50,7 +54,7 @@ class Login extends React.Component {
   render() {
     const { open, dimmer } = this.state
     return (
-      <Modal size='mini' dimmer={dimmer} open={open} onClose={this.props.handleClose}>
+      <Modal size='mini' dimmer={dimmer} open={open} onUnmount={() => this.handleClose()}>
         <Modal.Header>Log In</Modal.Header>
         <Modal.Content>
           {this.handleError()}

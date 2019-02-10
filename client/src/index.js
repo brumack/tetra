@@ -4,6 +4,7 @@ import 'semantic-ui-css/semantic.min.css';
 import { retrieveToken, storeToken } from './utils/handleToken.js'
 import Nav from './components/Nav'
 import List from './components/List'
+import Welcome from './components/Welcome'
 import './Index.css'
 
 import {
@@ -98,11 +99,18 @@ class App extends React.Component {
     }
   }
 
+  renderWelcome() {
+    if (!this.state.token) {
+      return <Welcome token={this.state.token} />
+    }
+  }
+
   render() {
     return (
       <div>
         <Nav token={this.state.token} email={this.state.email} login={this.login} logout={this.logout} signup={this.signup} />
         {this.renderList()}
+        {this.renderWelcome()}
       </div>
     )
   }

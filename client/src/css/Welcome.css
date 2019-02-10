@@ -1,0 +1,28 @@
+.ui.button {
+  color: white;
+}
+
+#login {
+  background: #2185d0
+}
+
+#signup {
+  background: #18458e
+}
+
+img {
+  padding: 10px
+}
+
+#modalLogo {
+  color: black;
+  font-family: 'Major Mono Display'
+}
+
+.ui.aligned.center.container {
+  font-family: 'Roboto:300';
+}
+
+.ui.center.aligned.header {
+  padding: 10px 0;
+}

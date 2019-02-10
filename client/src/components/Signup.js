@@ -76,10 +76,14 @@ class Signup extends React.Component {
     }
   }
 
+  handleClose() {
+    this.setState({ email: '', password: '', errorMessage: '' })
+  }
+
   render() {
     const { open, dimmer } = this.state
     return (
-      <Modal size='mini' dimmer={dimmer} open={open} onClose={this.props.handleClose}>
+      <Modal size='mini' dimmer={dimmer} open={open} onUnmount={() => this.handleClose()}>
         <Modal.Header>Sign Up!</Modal.Header>
         <Modal.Content>
           {this.handleError()}
