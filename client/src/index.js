@@ -1,8 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import 'semantic-ui-css/semantic.min.css';
 import { retrieveToken, storeToken } from './utils/handleToken.js'
 import Nav from './components/Nav'
-import Modal from './components/Modal'
 import List from './components/List'
 import './Index.css'
 
@@ -22,16 +22,18 @@ class App extends React.Component {
     allAssets: null,
     userAssets: null,
     modal: null,
-    token: null
+    token: null,
+    email: null
   }
 
   componentDidMount = async () => {
     this.getAllAssets()
     const token = retrieveToken('TETRA')
     if (token) {
-      let state = await verify(token)
+      let state = await verify(token.token)
       if (state.token) {
         this.getUserAssets(state.token)
+        this.setState({ email: token.email })
       }
       this.setState(state)
     }
@@ -45,17 +47,19 @@ class App extends React.Component {
   login = async (credentials) => {
     const state = await login(credentials)
     if (state.token) {
-      storeToken(state.token)
+      storeToken({ token: state.token, email: state.email })
       this.getUserAssets(state.token)
     }
     this.setState(state)
+    return state
   }
 
   signup = async (credentials) => {
     const state = await signup(credentials)
     if (state.token)
-      storeToken(state.token)
+      storeToken({ token: state.token, email: state.email })
     this.setState(state)
+    return state
   }
 
   logout = async () => {
@@ -82,26 +86,14 @@ class App extends React.Component {
     this.setState({ modal: null })
   }
 
-  renderModal = (modal) => {
-    switch (modal) {
-      case 'login':
-        return <Modal login={this.login} type='login' />
-      case 'signup':
-        return <Modal signup={this.signup} type='signup' />
-      case 'add':
-        return <Modal addAsset={this.addAsset} type='add' />
-      default:
-        return;
-    }
-  }
-
   renderList() {
     if (this.state.allAssets && this.state.userAssets) {
       return (
         <List allAssets={this.state.allAssets}
           userAssets={this.state.userAssets}
           modal={(modal) => this.setState({ modal })}
-          token={this.state.token} />
+          token={this.state.token}
+          addAsset={this.addAsset} />
       )
     }
   }
@@ -109,8 +101,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Nav token={this.state.token} logout={this.logout} />
-        {this.renderModal(this.state.modal)}
+        <Nav token={this.state.token} email={this.state.email} login={this.login} logout={this.logout} signup={this.signup} />
         {this.renderList()}
       </div>
     )

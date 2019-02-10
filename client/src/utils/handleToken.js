@@ -5,22 +5,24 @@ export function retrieveToken(key) {
   }
 
   try {
-    const keyString = localStorage.getItem(key)
-    if (keyString) {
-      return keyString
+    const keyObj = localStorage.getItem(key)
+    if (keyObj) {
+      return JSON.parse(keyObj)
     }
   } catch (e) {
+    console.log(e)
     return null
   }
 }
 
-export function storeToken(key) {
-  if (!key) {
+export function storeToken(obj) {
+  if (!obj) {
     console.err('Error: Missing Key')
   }
 
   try {
-    localStorage.setItem('TETRA', key)
+    console.log(obj)
+    localStorage.setItem('TETRA', JSON.stringify(obj))
   } catch (e) {
     console.err(e)
   }

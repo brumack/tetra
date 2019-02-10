@@ -1,6 +1,7 @@
 import React from 'react'
-import Modal from './Modal'
 import { Link, Redirect } from 'react-router-dom'
+import '../css/semantic.min.css'
+
 
 class Trade extends React.Component {
   state = { side: 'BUY', quantity: 0, price: 0, date: this.getTodaysDate(), redirect: false }

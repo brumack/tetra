@@ -3,10 +3,11 @@ const User = require('../models/User')
 const UserSession = require('../models/UserSession')
 const bodyParser = require('body-parser')
 
-router.use(bodyParser.urlencoded({ extended: true }))
+router.use(bodyParser.json())
 
 router.post('/new', (req, res) => {
   const { body } = req
+  console.log(body)
   let { email, password } = body
 
   if (!email) {
@@ -62,7 +63,8 @@ router.post('/new', (req, res) => {
         return res.send({
           success: true,
           message: 'New User Created.',
-          token: doc._id
+          token: doc._id,
+          email
         })
       })
     })
@@ -125,7 +127,8 @@ router.post('/login', (req, res) => {
       return res.send({
         success: true,
         message: 'Login successfull.',
-        token: doc._id
+        token: doc._id,
+        email
       })
     })
   })

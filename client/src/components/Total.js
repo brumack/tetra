@@ -1,5 +1,6 @@
 import React from 'react'
-import './Total.css'
+import '../css/semantic.min.css'
+import '../css/Total.css'
 
 const Total = (props) => {
   return (

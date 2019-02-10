@@ -12,18 +12,13 @@ export async function verify(token) {
 
 export async function login(credentials) {
   const response = await local.post(`/users/login`, credentials)
-  if (response.data.success) {
-    return { token: response.data.token, modal: null }
-  }
-  return { modal: null }
+  console.log(response.data)
+  return response.data
 }
 
 export async function signup(credentials) {
   const response = await local.post(`/users/new`, credentials)
-  if (response.data.success) {
-    return { token: response.data.token }
-  }
-  return { modal: null }
+  return response.data
 }
 
 export async function logout(token) {

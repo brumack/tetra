@@ -1,0 +1,10 @@
+body {
+  overscroll-behavior: none;
+}
+
+@media only screen and (min-width: 767px) {
+  body {
+    height: 100vh;
+    overflow-y: hidden;
+  }
+}

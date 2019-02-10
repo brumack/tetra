@@ -1,6 +1,7 @@
 import React from 'react'
-import Modal from './Modal'
 import { Redirect } from 'react-router-dom'
+import '../css/semantic.min.css'
+
 
 // NEED TO MAKE DELETE REQUEST FROM REMOVE BUTTON
 

@@ -1,10 +1,18 @@
+import { Grid, Item, Card, Segment, Image, Header } from 'semantic-ui-react'
 import React from 'react'
-import './Asset.css'
 import { getPrice } from '../utils/apiCalls'
+import '../css/Asset.css'
+
+
 
 class Asset extends React.Component {
 
-  state = { price: 0.00, value: 0.00, color: 'black' }
+  state = {
+    price: 0.00,
+    value: 0.00,
+    color: 'black',
+    modal: false
+  }
 
   componentDidMount() {
     this.getValues()
@@ -18,42 +26,44 @@ class Asset extends React.Component {
   }
 
   getValues = async () => {
-    const price = await getPrice(this.props.name)
-    if (price.USD !== this.state.price) {
-      this.setState({ price: price.USD })
-      this.setState({ value: this.state.price * this.props.quantity })
-    }
+    const result = await getPrice(this.props.name)
+    const price = result.USD
+    const value = price * this.props.quantity
+    this.props.returnValue(this.props.name, this.state.value)
+    this.setState({ price, value })
+  }
+
+
+  handleClick = () => {
+    this.setState({ modal: true })
   }
 
   render() {
     return (
-      <div className='item asset'>
-        <div className='card'>
-          <div className='content'>
-            <div className='ui segment'>
-              <div className='ui three column grid'>
-                <div className='row'>
-
-                  <div className='four wide center aligned column'>
-                    <img className='ui small circular image' src={this.props.logo} alt={this.props.name}></img>
-                  </div>
-
-                  <div className='six wide left aligned column ticker'>
-                    <div className='ui large header assetHeader'>{this.props.name}</div>
-                    <div className='meta'>{this.props.quantity} (${this.state.value.toFixed(2)})</div>
-                  </div>
-
-                  <div className='six wide right aligned column'>
-                    <div className='ui large header'>${this.state.price}</div>
-                    <div className='meta'></div>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Grid.Column width={8}>
+        <Item onClick={this.handleClick}>
+          <Card>
+            <Card.Content>
+              <Segment>
+                <Grid>
+                  <Grid.Row>
+                    <Grid.Column className='asset' textAlign='left' width={3}>
+                      <Image src={this.props.logo} size='mini' circular />
+                    </Grid.Column>
+                    <Grid.Column className='ticker' width={4} textAlign='left'>
+                      <Header className='assetHeader' as='h3'>{this.props.name.toLowerCase()}</Header>
+                      <Header as='h6'>{this.props.quantity} ${this.state.value.toFixed(2)}</Header>
+                    </Grid.Column>
+                    <Grid.Column width={9} textAlign='right'>
+                      <Header className='price' as='h4'>${this.state.price.toString().slice(0, 8)}</Header>
+                    </Grid.Column>
+                  </Grid.Row>
+                </Grid>
+              </Segment>
+            </Card.Content>
+          </Card>
+        </Item>
+      </Grid.Column>
     )
   }
 }

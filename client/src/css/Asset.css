@@ -1,0 +1,57 @@
+.ui.card {
+  width: 100%;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.ui.card>.content {
+  padding: 0
+}
+
+.ui.grid>.row {
+  padding: .5rem 0;
+}
+
+.ui.grid>.column:not(.row) {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+.ui.header {
+  margin: .2rem 0 0 0;
+}
+
+.item .header {
+  color: white;
+}
+
+.price {
+  font-family: Roboto;
+}
+
+.ui.header.assetHeader {
+  font-family: 'Major Mono Display';
+  margin-bottom: .2rem;
+}
+
+.card .segment {
+  background-color: rgb(26, 30, 48);
+  color: white;
+  border-radius: 0;
+}
+
+.ui.segment:hover {
+  background: rgba(61, 70, 107)
+}
+
+.ui.grid>.row>.column.ticker {
+  padding-left: 0
+}
+
+@media only screen and (max-width: 767px) {
+  .ui.stackable.grid>.column:not(.row),
+  .ui.stackable.grid>.wide.column {
+    padding: .25rem 1rem !important;
+  }
+}

@@ -1,21 +1,21 @@
 import React from 'react'
-import Modal from './Modal'
-import local from '../apis/local'
+import { Button, Modal, Form, Message } from 'semantic-ui-react'
 
 class Login extends React.Component {
 
   state = {
     email: '',
     password: '',
-    redirect: false
+    open: false,
+    errorMessage: null
   }
 
-  handleSubmit = async (e) => {
-    e.preventDefault()
-    const values = this.state
-    const success = await this.props.login(values)
-    if (success) {
-      this.setState({ redirect: true })
+  componentWillReceiveProps(newProps) {
+    if (newProps.dimmer !== this.state.dimmer) {
+      this.setState({ dimmer: newProps.dimmer })
+    }
+    if (newProps.open !== this.state.open) {
+      this.setState({ open: newProps.open })
     }
   }
 
@@ -25,33 +25,50 @@ class Login extends React.Component {
     this.setState(update)
   }
 
-  renderLoginModal() {
-    return (
-      <form className='ui form' onSubmit={this.handleSubmit}>
-        <h4 className='ui dividing header'>Login</h4>
+  handleSubmit = async (e) => {
+    const values = this.state
+    const response = await this.props.login(values)
+    if (response.success) {
+      this.props.handleClose()
+    } else {
+      this.setState({ errorMessage: response.message })
+    }
+  }
 
-        <div className='field'>
-          <label>Email</label>
-          <input type='text' name='email' value={this.state.email} onChange={this.handleChange} />
-        </div>
-
-        <div className='field'>
-          <label>Password</label>
-          <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
-        </div>
-
-        <input type='submit' className='ui button' tabIndex='0' />
-        <button className='ui red button'>Cancel</button>
-
-      </form>
-    )
+  handleError = () => {
+    if (this.state.errorMessage) {
+      return (
+        <Message
+          error
+          content={this.state.errorMessage}
+        />
+      )
+    }
   }
 
   render() {
+    const { open, dimmer } = this.state
     return (
-      <div>
-        <Modal content={this.renderLoginModal()} />
-      </div>
+      <Modal size='mini' dimmer={dimmer} open={open} onClose={this.props.handleClose}>
+        <Modal.Header>Log In</Modal.Header>
+        <Modal.Content>
+          {this.handleError()}
+          <Form>
+            <Form.Field>
+              <label>Email</label>
+              <input type='text' name='email' value={this.state.email} onChange={this.handleChange} />
+            </Form.Field>
+            <Form.Field>
+              <label>Password</label>
+              <input type='password' name='password' value={this.state.password} onChange={this.handleChange} />
+            </Form.Field>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button color='red' content="Cancel" onClick={this.props.handleClose} />
+          <Button positive content="Submit" onClick={this.handleSubmit} />
+        </Modal.Actions>
+      </Modal>
     )
   }
 }

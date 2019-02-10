@@ -1,3 +1,7 @@
+html {
+  width: 100vw;
+}
+
 body {
   background-color: #18458e !important;
   background-image: url('./images/tetraLogo.png') !important;

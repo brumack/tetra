@@ -1,55 +1,79 @@
 import React from 'react'
-import './Nav.css'
+import { Menu, Image, Item, Button, Header } from 'semantic-ui-react'
+import Signup from './Signup'
+import Login from './Login'
+import '../css/Nav.css'
 import logo from '../images/tetraLogo.png'
 
 class Nav extends React.Component {
 
   state = {
     token: null,
-    redirect: false
+    email: null,
+    redirect: false,
+    signUp: false,
+    login: false
   }
 
-  componentWillMount() {
-    this.setState({ token: this.props.token })
+  componentDidMount() {
+    this.setState({ token: this.props.token, email: this.props.email })
   }
 
   willReceiveProps(newProps) {
     if (newProps.token !== this.state.token) {
       this.setState({ token: newProps.token })
     }
+    if (newProps.email !== this.state.email) {
+      this.setState({ email: newProps.email })
+    }
   }
+
+  handleClose = () => this.setState({ signUp: false, login: false })
 
   renderButton() {
     if (this.props.token) {
-      return <button className="ui black button" onClick={this.props.logout}>Log out</button>
+      return (
+        <Menu.Item>
+          <Header id='greeting' size='small'>Hi {this.props.email}!</Header>
+          <Item>
+            <Button color='black' onClick={this.props.logout}>Log out</Button>
+          </Item>
+        </Menu.Item>
+      )
     } else {
       return (
-        <div className="ui buttons">
-          <button className="ui black button" onClick={this.props.login}>Login</button>
-          <div className="or"></div>
-          <button className="ui white button" onClick={this.props.signup}>Sign up!</button>
-        </div>
+        <Menu.Item>
+          <Item>
+            <Button.Group>
+              <Button color='black' onClick={() => this.setState({ login: true })}>Login</Button>
+              <Button.Or text='or' />
+              <Button color='grey' onClick={() => this.setState({ signUp: true })}>Sign Up!</Button>
+            </Button.Group>
+          </Item>
+        </Menu.Item>
       )
     }
   }
 
   render() {
     return (
-      <div id='nav' className='ui secondary pointing menu'>
-        <div className='left menu'>
-          <a href='/list'>
-            <div className='item'>
-              <img src={logo} alt='logo' />
-              <div id='logo' className='ui large header'>tetra</div>
-            </div>
-          </a>
-        </div>
-        <div className='right menu'>
-          <div className='ui item'>
-            {this.renderButton()}
-          </div>
-        </div>
-      </div >
+      <Menu secondary id='nav'>
+        <Signup dimmer={this.state.dimmer}
+          open={this.state.signUp}
+          handleClose={this.handleClose}
+          signup={this.props.signup}
+        />
+        <Login dimmer={this.state.dimmer}
+          open={this.state.login}
+          handleClose={this.handleClose}
+          login={this.props.login}
+        />
+        <Menu.Item position='left'>
+          <Image src={logo} size='mini' alt='logo' />
+          <div id='logo' className='ui large header'>tetra</div>
+        </Menu.Item>
+        {this.renderButton()}
+      </Menu >
     )
   }
 }
