@@ -6,11 +6,11 @@
 }
 
 .ui.card>.content {
-  padding: 0
+  padding: 2px 2px 0 2px;
 }
 
 .ui.grid>.row {
-  padding: .5rem 0;
+  padding: 1rem 0;
 }
 
 .ui.grid>.column:not(.row) {

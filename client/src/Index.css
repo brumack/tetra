@@ -1,12 +1,14 @@
-html {
-  width: 100vw;
-  overflow: hidden
-}
-
 body {
   background-color: #18458e !important;
   background-image: url('./images/tetraLogo.png') !important;
   background-repeat: no-repeat !important;
   background-position: center !important;
   background-attachment: fixed !important;
+}
+
+
+@media only screen and (min-width: 767px) {
+  body {
+    overflow-y: hidden
+  }
 }

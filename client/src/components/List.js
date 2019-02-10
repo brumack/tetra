@@ -64,7 +64,7 @@ class List extends React.Component {
             addAsset={this.props.addAsset}
           />
           <Grid.Row only='computer'>
-            <Grid.Column width={5} textAlign='center' className='sidebar'>
+            <Grid.Column width={5} textAlign='center' id='sidebar'>
               <Button circular primary size='massive' icon='plus' onClick={() => this.setState({ open: true })} />
               <Header as='h1'>Portfolio Value</Header>
               <Header as='h1'>${this.state.portfolioValue.toFixed(2)}</Header>
@@ -78,11 +78,15 @@ class List extends React.Component {
               </Container>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row only='mobile' className='topbar'>
-            <Grid.Column width={16} textAlign='center'>
-              <Header as='h6'>Portfolio Value</Header>
-              <Header as='h2'>${this.state.portfolioValue.toFixed(2)}</Header>
-              <Header as='h6'>0.00BTC</Header>
+          <Grid.Row only='mobile' id='topbar' centered colums={3}>
+            <Grid.Column width={5}></Grid.Column>
+            <Grid.Column width={6} textAlign='center'>
+              <Header as='h5'>Portfolio Value</Header>
+              <Header as='h1'>${this.state.portfolioValue.toFixed(2)}</Header>
+              <Header as='h5'>0.00BTC</Header>
+            </Grid.Column>
+            <Grid.Column width={5}>
+              <Button circular primary size='massive' icon='plus' onClick={() => this.setState({ open: true })} />
             </Grid.Column>
           </Grid.Row>
           <Grid.Row only='mobile'>

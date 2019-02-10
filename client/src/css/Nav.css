@@ -1,5 +1,4 @@
 #logo, #greeting {
-  margin-top: .5rem;
   font-family: 'Major Mono Display'
 }
 
@@ -7,20 +6,9 @@
   font-family: 'Roboto';
 }
 
-.right.item {
-  margin-left: 0;
-}
-
-#assetList {
-  margin-top: 50px;
-}
-
 #nav {
   background-color: #2185d0;
-}
-
-.ui.secondary.menu .item {
-  padding-right: 0 
+  margin-bottom: 0;
 }
 
 /* Major+Mono+Display|Oswald|Anton|Roboto:100 */

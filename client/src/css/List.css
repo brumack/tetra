@@ -1,33 +1,28 @@
 #main {
+  overflow-y: hidden;
+}
+
+.ui.grid {
+  margin: 0;
+}
+
+.ui.grid>.row {
   padding: 0;
 }
 
-#main .computer {
-  padding: 0;
+#sidebar {
+  background: rgb(26, 30, 48);
+  height: 100vh;
+  padding-top: 40px;
 }
 
-.ui.header {
+#sidebar .ui.header,
+#topbar .ui.header {
   color: white;
 }
 
-.sidebar {
-  background-color: rgb(26, 30, 48);
-  padding-top: 2%;
-  min-height: 100vh;
-  height: 100%;
-}
-
-.topbar {
-  position: fixed;
-  background-color: rgb(26, 30, 48);
-}
-
-#assetList {
-  margin-top: 2px
-}
-
-@media only screen and (max-width: 767px) {
-  .ui.grid .ui.stackable.grid {
-    margin: .25rem .5rem !important;
-  }
+#topbar {
+  background: rgb(26, 30, 48);
+  color: white;
+  padding: 20px 0;
 }
