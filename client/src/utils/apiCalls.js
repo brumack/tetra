@@ -23,7 +23,7 @@ export async function signup(credentials) {
 export async function logout(token) {
   const response = await local.get(`/users/logout?token=${token}`)
   if (response.data.success) {
-    return { token: null }
+    return { token: null, userAssets: null }
   } else {
     return {}
   }
