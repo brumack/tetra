@@ -10,12 +10,16 @@ app.use('/api', apiRoutes)
 app.use('/api/users', userRoutes)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')))
-// mongoose.connect('mongodb://127.0.0.1:27017/tetra', { useNewUrlParser: true })
-mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true })
+
+if (process.env.PRODUCTION) {
+  mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true })
+} else {
+  mongoose.connect('mongodb://127.0.0.1:27017/tetra', { useNewUrlParser: true })
+}
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`))
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT || 5000
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
