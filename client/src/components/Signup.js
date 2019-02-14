@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Header, Modal, Form, Message } from 'semantic-ui-react'
+import { Button, Header, Modal, Form } from 'semantic-ui-react'
 
 export default class Signup extends React.Component {
 
@@ -7,9 +7,13 @@ export default class Signup extends React.Component {
     email: '',
     password: '',
     verifyPassword: '',
-    showModal: false,
-    errorMessage: null
+    modalOpen: false
   }
+
+
+  handleOpen = () => this.setState({ modalOpen: true })
+
+  handleClose = () => this.setState({ modalOpen: false })
 
   handleChange = (e) => {
     const update = {}
@@ -19,74 +23,30 @@ export default class Signup extends React.Component {
 
   submit = async (e) => {
     const values = this.state
-    const response = await this.props.signup(values)
-    if (response.success) {
-      this.closeModal()
-    } else {
-      this.setState({ errorMessage: response.message })
-    }
-  }
-
-  checkIfValid = () => {
-    const { email, password, verifyPassword } = this.state
-    const emailCheck = new RegExp(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
-    const validEmail = email.search(emailCheck) === 0
-    let errorMessage = null
-    if (!validEmail) {
-      errorMessage = 'Invalid email address.'
-      this.setState({ email: '', password: '', verifyPassword: '' })
-    } else if (password.length < 8) {
-      errorMessage = 'Invalid password. Password must be 8 characters or longer.'
-      this.setState({ password: '', verifyPassword: '' })
-    } else if (password !== verifyPassword) {
-      errorMessage = 'Passwords do not match.'
-      this.setState({ email: '', password: '', verifyPassword: '' })
-    } else {
-      this.submit()
-    }
-  }
-
-  handleError = () => {
-    if (this.state.errorMessage) {
-      return <Message error content={this.state.errorMessage} />
-    }
-  }
-
-  closeModal = () => {
-    this.setState({
-      email: '',
-      password: '',
-      verifyPassword: '',
-      showModal: false,
-      errorMessage: null
-    })
+    this.props.signup(values)
   }
 
   render() {
-    const { email, password, verifyPassword, showModal } = this.state
+    const { email, password, verifyPassword } = this.state
     return (
-      <Modal trigger={<Button onClick={() => this.setState({ showModal: true })}>Sign Up!</Button>}
-        onClose={this.closeModal}
-        open={showModal}
+      <Modal trigger={<Button id='signup' onClick={this.handleOpen} size='mini'>Sign Up!</Button>}
+        size='mini'
+        onClose={this.handleClose}
+        open={this.state.modalOpen}
         closeIcon>
-        <Header icon='archive' content='Sign up!' />
+        <Header content='Sign up!' />
         <Modal.Content>
-          {this.handleError()}
           <Form>
             <Form.Field>
-              <label>Email</label>
-              <input type='text' name='email' value={email} onChange={this.handleChange} />
+              <input type='text' name='email' placeholder='Email' value={email} onChange={this.handleChange} />
             </Form.Field>
             <Form.Field>
-              <label>Password</label>
-              <input type='password' name='password' value={password} onChange={this.handleChange} />
+              <input type='password' name='password' placeholder='Password' value={password} onChange={this.handleChange} />
             </Form.Field>
             <Form.Field>
-              <label>Verify Password</label>
-              <input type='password' name='verifyPassword' value={verifyPassword} onChange={this.handleChange} />
+              <input type='password' name='verifyPassword' placeholder='Verify Password' value={verifyPassword} onChange={this.handleChange} />
             </Form.Field>
-            <Button color='red' content="Cancel" onClick={this.closeModal} />
-            <Button positive content="Submit" onClick={this.checkIfValid} />
+            <Button size='mini' content="Submit" onClick={this.submit} />
           </Form>
         </Modal.Content>
       </Modal>

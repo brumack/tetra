@@ -1,14 +1,142 @@
-#logo, #greeting {
+#Nav {
+  background-color: #2185d0;
+  margin-bottom: 0;
+  margin-top: 0;
+  transition: top 500ms 0ms
+}
+
+#mesage {
+  height: auto;
+  transition: height 1500ms 0ms;
+}
+
+#Nav h2 {
+  margin-top: 0;
+  font-family: 'Major Mono Display';
+  font-size: 2rem;
+}
+
+#login, #logout, #signup {
+  color: white;
+  box-shadow: 2px 2px #000, inset 0 0 10px #000000;
+  font-family: 'Roboto'
+}
+
+#logout, #login {
+  background: rgb(26, 30, 48);
+}
+
+#logout:hover, #login:hover {
+  background: rgb(56, 57, 61);
+}
+
+#signup:hover {
+  background: rgb(53, 53, 53);
+}
+
+#login {
+  align-self: flex-end;
+}
+
+
+#Nav .ui.mini.image {
+  float: left;
+}
+
+#Nav h2 {
+  float: left;
+}
+
+#logo {
+  text-align: center;
+}
+
+#logo img {
+  width: 60px;
+  height: auto;
+}
+
+#logo .ui.header {
   font-family: 'Major Mono Display'
 }
 
-#greeting {
-  font-family: 'Roboto';
+.ui.segment {
+  margin-top: 0;
+  background-color: #2185d0;
+  border: none;
 }
 
-#nav {
-  background-color: #2185d0;
-  margin-bottom: 0;
+#Nav .ui.button {
+  margin: 0 3px;
 }
+
+#id {
+  align-self: flex-start;
+}
+
+#mobileLogin {
+  width: 300px;
+}
+
+#centerButtons {
+  text-align: center;
+}
+
+#signup {
+  background: #000;
+}
+
+.ui.mini.button.positive {
+  background: #18458e;
+}
+
+.ui.mini.button {
+  background: #000;
+  padding: 10px;
+}
+
+.ui.button:hover {
+  background: rgb(66, 66, 66);
+  color: white;
+}
+
+.ui.button.positive:hover {
+  background: #3e5e91;
+}
+
+@media only screen and (max-width: 767px) {
+
+  .ui.secondary.menu .item:first-of-type div {
+    margin: 0 auto;
+  }
+
+  .ui.stackable.menu .left.item img, 
+  .ui.stackable.menu .left.item h2 {
+    display: inline !important;
+    text-align: center;
+  }
+
+  .ui.stackable.menu .item  {
+    width: 75%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  .ui.stackable.menu .item:last-of-type {
+    display: inline-block;
+    text-align: center;
+  }
+}
+
+@media only screen and (min-width: 767px) {
+  #Nav .item {
+    padding-right: 8px;
+    padding-left: 0px;
+    margin: 0;
+  }
+}
+
+
+
 
 /* Major+Mono+Display|Oswald|Anton|Roboto:100 */

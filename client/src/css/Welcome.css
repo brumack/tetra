@@ -1,13 +1,20 @@
+#welcomeContainer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#welcome {
+  text-align: center;
+}
+
+.ui.center.aligned.container {
+  background: rgba(255,255,255,.9);
+  padding: 20px;
+  font-family: 'Roboto:300';
+}
+
 .ui.button {
   color: white;
-}
-
-#login {
-  background: #2185d0
-}
-
-#signup {
-  background: #18458e
 }
 
 img {
@@ -17,10 +24,6 @@ img {
 #modalLogo {
   color: black;
   font-family: 'Major Mono Display'
-}
-
-.ui.aligned.center.container {
-  font-family: 'Roboto:300';
 }
 
 .ui.center.aligned.header {

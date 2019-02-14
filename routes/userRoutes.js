@@ -7,8 +7,9 @@ router.use(bodyParser.json())
 
 router.post('/new', (req, res) => {
   const { body } = req
-  console.log(body)
-  let { email, password } = body
+  let { email, password, verifyPassword } = body
+  email = email.toLowerCase()
+  const emailCheck = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 
   if (!email) {
     return res.send({
@@ -20,11 +21,39 @@ router.post('/new', (req, res) => {
   if (!password) {
     return res.send({
       success: false,
-      message: 'Password Required'
+      message: 'Password Required.'
     })
   }
 
-  email = email.toLowerCase()
+  if (!verifyPassword) {
+    return res.send({
+      success: false,
+      message: 'Passwords do not match.'
+    })
+  }
+
+  // email address not valid (regex)
+  if (email.search(emailCheck) !== 0) {
+    return res.send({
+      success: false,
+      message: 'Invalid email address.'
+    })
+  }
+
+  if (password.length < 8) {
+    return res.send({
+      success: false,
+      message: 'Invalid password. Password must be 8 characters or longer.'
+    })
+  }
+
+  if (password !== verifyPassword) {
+    return res.send({
+      success: false,
+      message: 'Passwords do not match.'
+    })
+  }
+
   User.find({ email }, (err, users) => {
     if (err) {
       return res.end({
@@ -215,15 +244,18 @@ router.get('/assets', (req, res) => {
   }
 })
 
-router.put('/assets', (req, res) => {
+router.post('/assets', (req, res) => {
   const { body } = req
   const { token, asset } = body
-
-  if (token.match(/^[0-9a-fA-F]{24}$/)) {
+  if (!token) {
+    res.send({
+      success: false,
+      message: 'Invalid token.'
+    })
+  } else if (token.match(/^[0-9a-fA-F]{24}$/)) {
     const session = UserSession.find({ _id: token, isDeleted: false }).exec()
     session.then(doc => {
       if (doc.length < 1) {
-        console.log('invalid session')
         res.send({
           success: false,
           message: 'Invalid session.'
@@ -239,7 +271,13 @@ router.put('/assets', (req, res) => {
           } else {
             const user = doc[0]
             if (user.assets.map(userAsset => userAsset.asset).indexOf(asset) === -1) {
-              User.updateOne({ _id: user._id }, { $push: { 'assets': { 'asset': asset, trades: [], quantity: 0 } } }, (err, result) => {
+              const newAsset = {
+                'asset': asset,
+                trades: [],
+                quantity: 0,
+                quantityOnly: true
+              }
+              User.updateOne({ _id: user._id }, { $push: { 'assets': newAsset } }, (err, result) => {
                 if (err) {
                   res.send({
                     success: false,
@@ -248,7 +286,7 @@ router.put('/assets', (req, res) => {
                 } else {
                   res.send({
                     success: true,
-                    message: 'Assets updated.'
+                    message: 'Asset added.'
                   })
                 }
               })
@@ -270,15 +308,55 @@ router.put('/assets', (req, res) => {
   }
 })
 
+router.put('/assets', (req, res) => {
+  const { body } = req
+  const { token, asset } = body
+  if (!token) {
+    res.send({
+      success: false,
+      message: 'Invalid token.'
+    })
+  } else if (token.match(/^[0-9a-fA-F]{24}$/)) {
+    const session = UserSession.find({ _id: token, isDeleted: false }).exec()
+    session.then(doc => {
+      if (doc.length < 1) {
+        res.send({ success: false, message: 'Invalid session.' })
+      } else {
+        const foundUser = User.find({ _id: doc[0].userId, isDeleted: false }).exec()
+        foundUser.then(doc => {
+          if (!doc[0]) {
+            res.send({ success: false, message: 'Server error.' })
+          } else {
+            const user = doc[0]
+            const assetIndex = user.assets.map(userAsset => userAsset.asset).indexOf(asset.asset)
+            if (assetIndex !== -1) {
+              const filteredAssets = user.assets.filter(userAsset => userAsset.asset !== asset.asset)
+              filteredAssets.push(asset)
+              User.updateOne({ _id: user._id }, { $set: { 'assets': filteredAssets } }, (err, result) => {
+                if (err) {
+                  res.send({ success: false, message: 'Server error.' })
+                } else {
+                  res.send({ success: true, message: 'Asset updated.', data: filteredAssets })
+                }
+              })
+            } else res.send({ success: false, message: 'Asset not owned by user.' })
+          }
+        })
+      }
+    })
+  } else {
+    res.send({ success: false, message: 'Invalid token.' })
+  }
+})
+
 router.delete('/assets', (req, res) => {
   const { query } = req
   const { token, asset } = query
 
-  if (token.match(/^[0-9a-fA-F]{24}$/)) {
+  if (token && token.match(/^[0-9a-fA-F]{24}$/)) {
     const session = UserSession.find({ _id: token, isDeleted: false }).exec()
     session.then(doc => {
       if (doc.length < 1) {
-        console.log('invalid session')
         res.send({
           success: false,
           message: 'Invalid session.'

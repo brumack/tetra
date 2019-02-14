@@ -1,0 +1,14 @@
+#Dashboard {
+  height: 100%;
+  margin-top: 0;
+}
+
+#Dashboard .row {
+  padding: 0;
+}
+
+#Dashboard .twelve.wide.column {
+    background-image: url('../images/tetraLogo.png');
+    background-repeat: no-repeat;
+    background-position: center;
+}

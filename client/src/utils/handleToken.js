@@ -1,13 +1,12 @@
 export function retrieveToken(key) {
-
   if (!key) {
     return null
   }
 
   try {
-    const keyObj = localStorage.getItem(key)
-    if (keyObj) {
-      return JSON.parse(keyObj)
+    const keyString = localStorage.getItem(key)
+    if (keyString) {
+      return keyString
     }
   } catch (e) {
     console.log(e)
@@ -15,13 +14,13 @@ export function retrieveToken(key) {
   }
 }
 
-export function storeToken(obj) {
-  if (!obj) {
+export function storeToken(key) {
+  if (!key) {
     console.err('Error: Missing Key')
   }
 
   try {
-    localStorage.setItem('TETRA', JSON.stringify(obj))
+    localStorage.setItem('TETRA', key)
   } catch (e) {
     console.err(e)
   }

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { Image } from 'semantic-ui-react'
 import '../css/Autocomplete.css'
+import AutoImage from './AutoImage'
 
 class Autocomplete extends Component {
 
@@ -16,7 +16,7 @@ class Autocomplete extends Component {
 
   // Event fired when the input value is changed
   onChange = e => {
-    const suggestions = Object.keys(this.props.allAssetSymbols)
+    const suggestions = Object.keys(this.props.asset_symbols_and_logos)
     const userInput = e.currentTarget.value
 
     // Filter our suggestions that don't contain the user's input
@@ -52,8 +52,10 @@ class Autocomplete extends Component {
       filteredSuggestions: [],
       showSuggestions: false,
       userInput: e.currentTarget.innerText.toUpperCase()
+    }, () => {
+      const filteredInput = this.state.userInput.split('').filter(char => char.charCodeAt(0) !== 10).join('')
+      this.props.retrieveValue(filteredInput, true)
     });
-    this.checkIfValid(e.currentTarget.innerText.toUpperCase())
   };
 
   // Event fired when the user presses a key down
@@ -95,8 +97,7 @@ class Autocomplete extends Component {
   };
 
   checkIfValid = (input) => {
-    this.props.retrieveValue(input)
-    if (Object.keys(this.props.allAssetSymbols).indexOf(input) === -1) {
+    if (Object.keys(this.props.asset_symbols_and_logos).indexOf(input) === -1) {
       this.props.disableButton(true)
     } else {
       this.props.disableButton(false)
@@ -137,8 +138,7 @@ class Autocomplete extends Component {
                   key={suggestion}
                   onClick={onClick}
                 >
-                  <Image src={`https://cryptocompare.com${this.props.allAssetSymbols[suggestion]}`} avatar />
-                  {suggestion}
+                  <AutoImage src={`https://cryptocompare.com${this.props.asset_symbols_and_logos[suggestion]}`} suggestion={suggestion} />
                 </li>
               );
             }).slice(0, 10)}
@@ -160,6 +160,7 @@ class Autocomplete extends Component {
           onChange={onChange}
           onKeyDown={onKeyDown}
           value={userInput}
+          autoFocus
         />
         {suggestionsListComponent}
       </Fragment>
@@ -168,3 +169,5 @@ class Autocomplete extends Component {
 }
 
 export default Autocomplete;
+
+//                   <Image src={`https://cryptocompare.com${this.props.asset_symbols_and_logos[suggestion]}`} avatar />

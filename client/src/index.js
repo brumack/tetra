@@ -1,118 +1,214 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import 'semantic-ui-css/semantic.min.css';
-import { retrieveToken, storeToken } from './utils/handleToken.js'
+
 import Nav from './components/Nav'
-import List from './components/List'
 import Welcome from './components/Welcome'
+import Dashboard from './components/Dashboard'
+import SlideMessage from './components/SlideMessage'
+
+import { Message, Dimmer, Loader, Container } from 'semantic-ui-react'
+
+import { retrieveToken, storeToken } from './utils/handleToken.js'
+import local from './apis/local'
 import './Index.css'
 
-import {
-  verify,
-  login,
-  signup,
-  logout,
-  getAllAssets,
-  getUserAssets,
-  addAsset
-} from './utils/apiCalls'
+import 'react-slidedown/lib/slidedown.css'
+
+import 'semantic-ui-css/semantic.min.css';
 
 class App extends React.Component {
 
   state = {
     allAssets: null,
     userAssets: null,
-    modal: null,
+    assetSymbolsAndLogos: null,
     token: null,
-    email: null
+    message: null,
+    loadng: true
   }
 
   componentDidMount = async () => {
-    this.getAllAssets()
+    const assets = await this.getAllAssets()
+    this.getAssetSymbolsAndLogos(assets)
     const token = retrieveToken('TETRA')
     if (token) {
-      let state = await verify(token.token)
-      if (state.token) {
-        this.getUserAssets(state.token)
-        this.setState({ email: token.email })
-      }
-      this.setState(state)
+      this.verify(token)
+    } else {
+      this.setState({ loading: false, token: '' })
     }
   }
 
-  verify = async () => {
-    const state = await verify(this.state.token)
-    this.setState(state)
-  }
-
-  login = async (credentials) => {
-    const state = await login(credentials)
-    if (state.token) {
-      storeToken({ token: state.token, email: state.email })
-      this.getUserAssets(state.token)
+  verify = async token => {
+    const response = await local.get(`/users/verify?token=${token}`)
+    const data = response.data
+    if (data.success) {
+      this.setState({ token, loading: false })
+      this.getUserAssets()
+    } else {
+      this.setState({ token: '', loading: false })
     }
-    this.setState(state)
-    return state
   }
 
-  signup = async (credentials) => {
-    const state = await signup(credentials)
-    if (state.token)
-      storeToken({ token: state.token, email: state.email })
-    this.setState(state)
-    return state
+  login = async credentials => {
+    const response = await local.post(`/users/login`, credentials)
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else if (data.token) {
+      storeToken(data.token)
+      this.setState({ token: data.token })
+      this.getUserAssets(data.token)
+    }
+  }
+
+  signup = async credentials => {
+    const response = await local.post(`/users/new`, credentials)
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else if (data.token) {
+      this.setState({ token: data.token })
+      storeToken(data.token)
+    }
   }
 
   logout = async () => {
-    const state = await logout(this.state.token)
-    this.setState(state)
+    const response = await local.get(`/users/logout?token=${this.state.token}`)
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else {
+      this.setState({ token: '' })
+    }
   }
 
   getAllAssets = async () => {
-    const state = await getAllAssets()
-    this.setState(state)
+    const response = await local.get('/allAssets')
+    const data = response.data
+    this.setState({ allAssets: data })
+    return data
   }
 
-  getUserAssets = async (token) => {
-    const state = await getUserAssets(token)
-    this.setState(state)
+  getUserAssets = async () => {
+    const response = await local.get(`/users/assets?token=${this.state.token}`)
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else {
+      this.setState({ userAssets: data.data })
+    }
   }
 
-  addAsset = async (asset) => {
-    const result = await addAsset(this.state.token, asset)
-    if (result.success) {
-      const newAsset = { asset, trades: [], quantity: 0 }
+  addAsset = async asset => {
+    const token = this.state.token
+    const response = await local.post(`users/assets`, { token, asset })
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else {
+      const newAsset = { asset, trades: [], quantity: 0, quantityOnly: true }
       this.setState({ userAssets: [...this.state.userAssets, newAsset] })
     }
-    this.setState({ modal: null })
   }
 
-  renderList() {
-    if (this.state.allAssets && this.state.userAssets) {
+  updateAsset = async asset => {
+    const token = this.state.token
+    const response = await local.put(`users/assets`, { token, asset })
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else {
+      this.setState({ userAssets: data.data })
+    }
+  }
+
+  removeAsset = async asset => {
+    const token = this.state.token
+    const response = await local.delete(`users/assets?token=${token}&asset=${asset.asset}`)
+    const data = response.data
+    if (!data.success) {
+      this.handleError(data.message)
+    } else {
+      const userAssets = this.state.userAssets
+      const updatedAssets = userAssets.filter(currentAsset => {
+        return asset.asset !== currentAsset.asset
+      })
+      this.setState({ userAssets: updatedAssets })
+    }
+    console.log('remove completed')
+  }
+
+  getAssetSymbolsAndLogos(assets) {
+    const assetSymbolsAndLogos = {}
+    Object.keys(assets).map(asset => {
+      return assetSymbolsAndLogos[asset.toUpperCase()] = assets[asset].ImageUrl
+    })
+    this.setState({ assetSymbolsAndLogos })
+  }
+
+  renderDashboard() {
+
+    const actions = {}
+    actions.addAsset = this.addAsset
+    actions.removeAsset = this.removeAsset
+    actions.updateAsset = this.updateAsset
+    if (this.state.token !== '') {
       return (
-        <List allAssets={this.state.allAssets}
+        <Dashboard
+          allAssets={this.state.allAssets}
           userAssets={this.state.userAssets}
-          modal={(modal) => this.setState({ modal })}
           token={this.state.token}
-          addAsset={this.addAsset} />
+          actions={actions}
+          assetSymbolsAndLogos={this.state.assetSymbolsAndLogos} />
       )
     }
   }
 
   renderWelcome() {
     if (!this.state.token) {
-      return <Welcome token={this.state.token} signup={this.signup} login={this.login} />
+      return (
+        <Container id='welcomeContainer'>
+          <Welcome token={this.state.token} />
+        </Container>
+      )
     }
   }
 
+  handleError(message) {
+    this.setState({ message })
+    setTimeout(() => {
+      this.setState({ message: null })
+    }, 3000)
+  }
+
+  renderError() {
+    if (this.state.message !== null)
+      return (
+        <Message centered={true} negative>
+          <p>{this.state.message}</p>
+        </Message>
+      )
+  }
+
   render() {
-    return (
-      <div>
-        <Nav token={this.state.token} email={this.state.email} login={this.login} logout={this.logout} signup={this.signup} />
-        {this.renderList()}
-        {this.renderWelcome()}
-      </div>
-    )
+    if (this.state.token === null || this.state.allAssets === null || this.state.assetSymbolsAndLogos === null) {
+      return (
+        <Dimmer active>
+          <Loader>Data Loading</Loader>
+        </Dimmer>
+      )
+    } else {
+      return (
+        <div id="index">
+          <SlideMessage open={this.state.message !== null}>
+            {this.renderError()}
+          </SlideMessage>
+          <Nav token={this.state.token} email={this.state.email} login={this.login} logout={this.logout} signup={this.signup} />
+          {this.renderWelcome()}
+          {this.renderDashboard()}
+        </div>
+      )
+    }
   }
 }
 

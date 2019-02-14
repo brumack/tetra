@@ -1,0 +1,15 @@
+.ui.segment {
+  padding-top: 0;
+}
+
+.ui.form .field {
+  margin-bottom: .5em;
+}
+
+.ui.button {
+  padding: 0 1em;
+  width: 10em;
+}
+.ui.form .fields {
+  margin-bottom: 0;
+}

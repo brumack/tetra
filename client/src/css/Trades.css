@@ -1,0 +1,68 @@
+#tradeForm {
+  display: inline-block;
+  margin: 0 auto;
+}
+
+#valueForm {
+   display: inline-block;
+   margin: 0 auto;
+ }
+
+ #valueForm img {
+   display: inline-block;
+   margin: 0 auto;
+ }
+
+.ui.input {
+  margin: 0;
+  border-bottom: 2px solid #2185d0;
+  color: #2185d0;
+}
+
+
+.ui.form .field .ui.input input {
+  background-color: rgb(26, 30, 48);
+  color:  #2185d0;
+  text-align: center;
+}
+
+.ui.form .field .ui.input input:focus {
+  border:none;
+}
+
+#tradeForm .field>label, 
+#valueForm .field>label,
+.ui.form .field .ui.input input::placeholder  {
+  color:  #2185d0;
+}
+
+input[type='number']::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  -moz-appearance:textfield !important;
+}
+
+#update {
+  height: 50%;
+}
+
+#update.ui.button {
+  box-shadow: 3px 3px 3px 3px #000, inset 0 0 10px #000000;
+}
+
+#update.ui.button:hover {
+  box-shadow: 1px 1px 2px #000, inset 0 0 13px #000000;
+}
+
+#cancel.ui.button {
+  background-color: rgb(31, 31, 31);
+}
+
+#cancel.ui.button:not(.icon)>.icon:not(.button):not(.dropdown),
+#delete.ui.button:not(.icon)>.icon:not(.button):not(.dropdown) {
+  margin: 0;
+}
+
+#delete.ui.button {
+  background-color: rgb(151, 1, 1);
+}

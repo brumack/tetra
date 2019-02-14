@@ -1,56 +1,89 @@
 import React from 'react'
-import '../css/semantic.min.css'
-import '../css/Details.css'
+import { Button, Header, Modal, Grid, Item, Image, Loader } from 'semantic-ui-react'
+
+import Asset from './Asset'
+
+export default class Detail extends React.Component {
+
+  state = {
+    asset: null,
+    holdings: null,
+    modalOpen: false
+  }
+
+  componentDidMount() {
+    this.setState({ asset: this.props.asset, holdings: this.props.holdings, loading: false })
+  }
+
+  handleOpen = () => this.setState({ modalOpen: true })
+
+  handleClose = () => this.setState({ modalOpen: false })
 
 
-class Detail extends React.Component {
+  retrieveValue = value => this.setState({ value })
 
-  state = { asset: null, price: 0.00 }
+  handleDelete = () => {
+    this.props.remove_asset(this.props.asset.Name)
+    this.handleClose()
+  }
 
-  componentDidMount = async () => {
-    this.setState({ asset: this.props.asset })
+  handleReturnShowForm = () => {
+    this.props.returnshowform(this.props.holdings)
+    this.handleClose()
   }
 
   render() {
+    const { asset, holdings } = this.props
+    if (Object.values(this.state).indexOf(null) !== -1) {
+      return (
+        <Loader>Loading</Loader>
+      )
+    }
     return (
-      <div id='details' className='ui grid'>
-        <div className='ui centered row'>
-          <div className="ui item">
-            <div className="content">
-              <div className="ui huge header">
-                <img id='logo' className="ui mini image" src={this.props.asset.logo} alt='logo' />
-                {this.props.asset.name}
-              </div>
-            </div>
-          </div>
-        </div>
-        <table className="ui celled table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Side</th>
-              <th>Quantity</th>
-              <th>Price</th>
-              <th>Total Cost/Gain</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
-        <div className='ui centered row'>
-          <div className='ui item'>
-            <div className="bottom aligned centered content">
-              <div className="ui basic green button">
-                Add trade record
-                </div>
-              <button className='ui basic red button'>Back</button>
-              <button className='ui right floated red button'>Remove</button>
-            </div>
-          </div>
-        </div>
-      </div >
+      <Modal trigger={<Asset {...this.props} onClick={this.handleOpen} />}
+        size='tiny'
+        onClose={this.handleClose}
+        open={this.state.modalOpen}
+        closeIcon>
+        <Modal.Content>
+          <Grid>
+            <Grid.Row centered>
+              <Item>
+                <Item.Content>
+                  <Image src={`http://www.cryptocompare.com${asset.ImageUrl}`} size='tiny' avatar alt='logo' />
+                  <Header as='h2'>{this.props.asset.Name}</Header>
+                </Item.Content>
+              </Item>
+            </Grid.Row>
+            <Grid.Row centered>
+              <Item>
+                <Item.Content verticalAlign='bottom'>
+                  <Button.Group>
+                    <Button onClick={this.handleReturnShowForm}>Update</Button>
+                    <Button.Or />
+                    <Button color="red" onClick={this.handleDelete}>Remove</Button>
+                  </Button.Group>
+                </Item.Content>
+              </Item>
+            </Grid.Row>
+          </Grid>
+        </Modal.Content>
+      </Modal>
     )
   }
 }
 
-export default Detail
+
+/* <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Date</Table.HeaderCell>
+                  <Table.HeaderCell>Side</Table.HeaderCell>
+                  <Table.HeaderCell>Quantity</Table.HeaderCell>
+                  <Table.HeaderCell>Price</Table.HeaderCell>
+                  <Table.HeaderCell>Total Cost/Gain</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+              </Table.Body>
+            </Table> */

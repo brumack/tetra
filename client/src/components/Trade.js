@@ -7,6 +7,7 @@ class Trade extends React.Component {
   state = { side: 'BUY', quantity: 0, price: 0, date: this.getTodaysDate(), redirect: false }
 
   componentDidMount() {
+    console.log('trade', this.props)
     const asset = this.props.asset
     this.setState({ asset })
   }
