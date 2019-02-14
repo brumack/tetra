@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Header, Modal, Form } from 'semantic-ui-react'
+import '../css/Signup.css'
 
 export default class Signup extends React.Component {
 
@@ -47,7 +48,7 @@ export default class Signup extends React.Component {
             <Form.Field>
               <input type='password' name='verifyPassword' placeholder='Verify Password' value={verifyPassword} onChange={this.handleChange} />
             </Form.Field>
-            <Button size='mini' content="Submit" onClick={this.submit} />
+            <Button id='signupConfirm' ize='mini' content="Submit" onClick={this.submit} />
           </Form>
         </Modal.Content>
       </Modal>

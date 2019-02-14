@@ -9,11 +9,20 @@ class Asset extends React.Component {
     USD: null,
     value: null,
     loading: true,
+    quantity: null
   }
 
   componentDidMount() {
+    this.setState({ quantity: this.props.asset.quantity })
     this.getValues()
     this.refresh = setInterval(this.getValues, 30000)
+  }
+
+  componentWillReceiveProps(newProps) {
+    if (newProps.asset.quantity != this.state.quantity) {
+      this.setState({ quantity: newProps.asset.quantity })
+      this.getValues()
+    }
   }
 
   componentWillUnmount = () => clearInterval(this.refresh)
@@ -55,7 +64,7 @@ class Asset extends React.Component {
           <Card.Content floated='left'>
             <Card.Header className='ticker'>{asset.asset.toLowerCase()}</Card.Header>
             <Card.Meta className='price'>${USD.toFixed(2)}</Card.Meta>
-            <Card.Meta className='quantity'>{quantity}</Card.Meta>
+            <Card.Meta className='quantity'>{Number(quantity)}</Card.Meta>
             <Card.Meta className='value'>${(quantity * USD).toFixed(2)}</Card.Meta>
           </Card.Content>
         </Card.Content>

@@ -72,18 +72,3 @@ export default class Detail extends React.Component {
     )
   }
 }
-
-
-/* <Table celled>
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Date</Table.HeaderCell>
-                  <Table.HeaderCell>Side</Table.HeaderCell>
-                  <Table.HeaderCell>Quantity</Table.HeaderCell>
-                  <Table.HeaderCell>Price</Table.HeaderCell>
-                  <Table.HeaderCell>Total Cost/Gain</Table.HeaderCell>
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-              </Table.Body>
-            </Table> */

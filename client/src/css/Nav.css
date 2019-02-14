@@ -18,20 +18,24 @@
 
 #login, #logout, #signup {
   color: white;
-  box-shadow: 2px 2px #000, inset 0 0 10px #000000;
+  box-shadow: 2px 2px #000, inset 0 0 5px #000000;
   font-family: 'Roboto'
 }
 
+#login:hover, #logout:hover, #signup:hover {
+  box-shadow: 1px 1px #000, inset 1px 1px 10px #000000;
+}
+
 #logout, #login {
-  background: rgb(26, 30, 48);
+  background: #163C83;
 }
 
 #logout:hover, #login:hover {
-  background: rgb(56, 57, 61);
+  background: rgb(0, 48, 136);
 }
 
 #signup:hover {
-  background: rgb(53, 53, 53);
+  background: #0075cf;
 }
 
 #login {
@@ -83,7 +87,7 @@
 }
 
 #signup {
-  background: #000;
+  background: #2185d0;
 }
 
 .ui.mini.button.positive {

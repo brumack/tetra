@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button, Header, Modal, Form, Loader } from 'semantic-ui-react'
+import '../css/AddAsset.css'
 
 import Autocomplete from './Autocomplete'
 
@@ -47,6 +48,7 @@ export default class AddAsset extends React.Component {
                 />
               </Form.Field>
               <Button
+                id='addButton'
                 positive
                 icon='plus'
                 disabled={this.state.disableButton}

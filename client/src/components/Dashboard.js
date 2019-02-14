@@ -29,6 +29,7 @@ export default class Dashboard extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
+    this.calculateTotalValue()
     const { userAssets } = newProps
     if (userAssets !== this.state.userAssets) {
       this.setState({ userAssets })
@@ -38,7 +39,8 @@ export default class Dashboard extends React.Component {
   handleReturnedValues = asset => {
     const { assetValues } = this.state
     assetValues[asset.name] = asset.value
-    this.setState({ assetValues }, () => this.calculateTotalValue())
+    this.setState({ assetValues })
+    this.calculateTotalValue()
   }
 
   updateActiveAsset = activeAsset => this.setState({ activeAsset })
@@ -48,8 +50,10 @@ export default class Dashboard extends React.Component {
   }
 
   calculateTotalValue() {
-    const portfolioValue = Object.values(this.state.assetValues).reduce((a, b) => a + b).toFixed(2)
-    this.setState({ portfolioValue })
+    if (Object.values(this.state.assetValues).length > 0) {
+      const portfolioValue = Object.values(this.state.assetValues).reduce((a, b) => a + b).toFixed(2)
+      this.setState({ portfolioValue })
+    }
   }
 
   render() {

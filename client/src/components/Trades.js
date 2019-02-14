@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Button, Icon, Image } from 'semantic-ui-react'
+import { Form, Button, Icon } from 'semantic-ui-react'
 import '../css/Trades.css'
 
 class Trades extends React.Component {
@@ -31,7 +31,7 @@ class Trades extends React.Component {
     if (this.state.showForm !== showForm) {
       this.setState({ showForm })
     }
-    if (this.state.activeAsset != activeAsset) {
+    if (this.state.activeAsset !== activeAsset) {
       this.setState({ activeAsset, quantity: Number(activeAsset.quantity) })
     }
   }

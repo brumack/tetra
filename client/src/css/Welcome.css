@@ -10,6 +10,7 @@
 .ui.center.aligned.container {
   background: rgba(255,255,255,.9);
   padding: 20px;
+  margin: 200px;
   font-family: 'Roboto:300';
 }
 
