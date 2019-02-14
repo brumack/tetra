@@ -34,11 +34,8 @@ export default class Signup extends React.Component {
         onClose={this.handleClose}
         open={this.state.modalOpen}
         closeIcon>
-<<<<<<< HEAD
-        <Header content='Sign up!' />
-=======
-        <Header icon='lilne graph' content='Sign up!' />
->>>>>>> a9f8ba179196abfdfdbed352ca055c22fa166d53
+
+        <Header icon='line graph' content='Sign up!' />
         <Modal.Content>
           <Form>
             <Form.Field>

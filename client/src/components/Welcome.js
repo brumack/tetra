@@ -13,6 +13,11 @@ const Welcome = () => {
           Manage asset balances, watch interesting tokens, and keep trade records to understand where you caught the bottom, and where you maybe
            made a bad trade.
         </p>
+        <p>
+          This project is still in development. The current version allows for asset balance and portfolio value
+          tracking. Future additions will include trade record management with balance calculations using LIFO
+          principles.
+        </p>
         <Divider />
         <p>Project developed by Bradley Rumack as a work example for potential employers and is free to use.
           <br />
