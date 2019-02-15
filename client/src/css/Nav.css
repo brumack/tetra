@@ -27,11 +27,12 @@
 }
 
 #logout, #login {
-  background: #163C83;
+  background: rgb(26, 30, 48);
 }
 
 #logout:hover, #login:hover {
-  background: rgb(0, 48, 136);
+  background: rgb(7, 8, 12);
+
 }
 
 #signup:hover {

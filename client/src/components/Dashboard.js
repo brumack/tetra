@@ -9,7 +9,7 @@ import '../css/Dashboard.css'
 export default class Dashboard extends React.Component {
 
   state = {
-    userAssets: null,
+    userAssets: [],
     allAssets: null,
     activeAsset: {},
     showForm: false,
@@ -64,21 +64,24 @@ export default class Dashboard extends React.Component {
 
       return (
         <Grid id='Dashboard'>
-          <Grid.Row only='tablet mobile'>
+
+          <Grid.Row id='topbar' only='tablet mobile'>
             <Topbar
               add_asset={addAsset}
               allAssets={allAssets}
+              portfolioValue={portfolioValue}
             />
           </Grid.Row>
           <Grid.Row only='tablet mobile'>
             <Assets
-              user_assets={this.state.userAssets}
+              userAssets={userAssets}
               allAssets={allAssets}
-              actions={actions}
-            />
+              returnValue={this.handleReturnedValues}
+              updateActiveAsset={this.updateActiveAsset} />
           </Grid.Row>
+
           <Grid.Row only='computer'>
-            <Grid.Column width={6}>
+            <Grid.Column width={5}>
               <Sidebar
                 addAsset={addAsset}
                 updateAsset={updateAsset}
@@ -90,7 +93,7 @@ export default class Dashboard extends React.Component {
                 hideForm={this.hideForm}
               />
             </Grid.Column>
-            <Grid.Column width={10}>
+            <Grid.Column width={11}>
               <Assets
                 userAssets={userAssets}
                 allAssets={allAssets}
@@ -98,7 +101,7 @@ export default class Dashboard extends React.Component {
                 updateActiveAsset={this.updateActiveAsset} />
             </Grid.Column>
           </Grid.Row>
-        </Grid>
+        </Grid >
       )
     }
     return (

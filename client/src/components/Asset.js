@@ -19,7 +19,7 @@ class Asset extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.asset.quantity != this.state.quantity) {
+    if (newProps.asset.quantity !== this.state.quantity) {
       this.setState({ quantity: newProps.asset.quantity })
       this.getValues()
     }

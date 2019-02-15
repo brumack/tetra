@@ -20,7 +20,7 @@ class App extends React.Component {
 
   state = {
     allAssets: null,
-    userAssets: null,
+    userAssets: [],
     assetSymbolsAndLogos: null,
     token: null,
     message: null,
@@ -100,14 +100,19 @@ class App extends React.Component {
   }
 
   addAsset = async asset => {
-    const token = this.state.token
-    const response = await local.post(`users/assets`, { token, asset })
-    const data = response.data
-    if (!data.success) {
-      this.handleError(data.message)
+    if (asset) {
+      console.log('asset')
+      const token = this.state.token
+      const response = await local.post(`users/assets`, { token, asset })
+      const data = response.data
+      if (!data.success) {
+        this.handleError(data.message)
+      } else {
+        const newAsset = { asset, trades: [], quantity: 0, quantityOnly: true }
+        this.setState({ userAssets: [...this.state.userAssets, newAsset] })
+      }
     } else {
-      const newAsset = { asset, trades: [], quantity: 0, quantityOnly: true }
-      this.setState({ userAssets: [...this.state.userAssets, newAsset] })
+      this.handleError('Error adding asset')
     }
   }
 

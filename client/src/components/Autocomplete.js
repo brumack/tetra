@@ -101,6 +101,7 @@ class Autocomplete extends Component {
       this.props.disableButton(true)
     } else {
       this.props.disableButton(false)
+      this.props.retrieveValue(input)
     }
   }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Header, Modal, Form, Loader } from 'semantic-ui-react'
+import { Button, Header, Modal, Form, Loader, Dimmer } from 'semantic-ui-react'
 import '../css/AddAsset.css'
 
 import Autocomplete from './Autocomplete'
@@ -31,6 +31,12 @@ export default class AddAsset extends React.Component {
     }
   }
 
+  handleSubmit = e => {
+    e.preventDefault()
+    this.props.addAsset(this.state.value)
+    this.handleClose()
+  }
+
   render() {
     if (Object.values(this.state).indexOf(null) === -1 && Object.values(this.state).indexOf(undefined) === -1)
       return (
@@ -42,7 +48,8 @@ export default class AddAsset extends React.Component {
           <Modal.Content>
             <Form>
               <Form.Field>
-                <Autocomplete asset_symbols_and_logos={this.props.assetSymbolsAndLogos}
+                <Autocomplete
+                  asset_symbols_and_logos={this.props.assetSymbolsAndLogos}
                   disableButton={this.disableButton}
                   retrieveValue={this.retrieveValue}
                 />
@@ -54,15 +61,16 @@ export default class AddAsset extends React.Component {
                 disabled={this.state.disableButton}
                 labelPosition='right'
                 content="Add"
-                onClick={async () => {
-                  this.props.add_asset(this.state.value)
-                  this.handleClose()
-                }}
+                onClick={this.handleSubmit}
               />
             </Form>
           </Modal.Content>
         </Modal>
       )
-    return <Loader>Loading</Loader>
+    return (
+      <Dimmer active>
+        <Loader>Loading</Loader>
+      </Dimmer>
+    )
   }
 }
