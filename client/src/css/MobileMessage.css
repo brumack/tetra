@@ -1,0 +1,34 @@
+#mobileMessageContainer {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+#mobileMessage {
+  text-align: center;
+}
+
+#mobileMessage .ui.header {
+  color: black;
+}
+
+.ui.center.aligned.container {
+  background: rgba(255,255,255,.9);
+  font-family: 'Roboto:300';
+}
+
+.ui.button {
+  color: white;
+}
+
+img {
+  padding: 10px
+}
+
+#modalLogo {
+  color: black;
+  font-family: 'Major Mono Display'
+}
+
+.ui.center.aligned.header {
+  padding: 10px 0;
+}

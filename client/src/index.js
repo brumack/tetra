@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 
 import Nav from './components/Nav'
 import Welcome from './components/Welcome'
+import MobileMessage from './components/MobileMessage'
 import Dashboard from './components/Dashboard'
 import SlideMessage from './components/SlideMessage'
 
@@ -101,7 +102,6 @@ class App extends React.Component {
 
   addAsset = async asset => {
     if (asset) {
-      console.log('asset')
       const token = this.state.token
       const response = await local.post(`users/assets`, { token, asset })
       const data = response.data

@@ -3,6 +3,7 @@ import { Grid, Loader } from 'semantic-ui-react'
 import Assets from './Assets'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
+import MobileMessage from './MobileMessage'
 
 import '../css/Dashboard.css'
 
@@ -66,19 +67,9 @@ export default class Dashboard extends React.Component {
         <Grid id='Dashboard'>
 
           <Grid.Row id='topbar' only='tablet mobile'>
-            <Topbar
-              add_asset={addAsset}
-              allAssets={allAssets}
-              portfolioValue={portfolioValue}
-            />
+            <MobileMessage />
           </Grid.Row>
-          <Grid.Row only='tablet mobile'>
-            <Assets
-              userAssets={userAssets}
-              allAssets={allAssets}
-              returnValue={this.handleReturnedValues}
-              updateActiveAsset={this.updateActiveAsset} />
-          </Grid.Row>
+
 
           <Grid.Row only='computer'>
             <Grid.Column width={5}>
@@ -109,4 +100,19 @@ export default class Dashboard extends React.Component {
     )
   }
 }
+
+/* <Grid.Row id='topbar' only='tablet mobile'>
+  <Topbar
+    add_asset={addAsset}
+    allAssets={allAssets}
+    portfolioValue={portfolioValue}
+  />
+</Grid.Row>
+  <Grid.Row only='tablet mobile'>
+    <Assets
+      userAssets={userAssets}
+      allAssets={allAssets}
+      returnValue={this.handleReturnedValues}
+      updateActiveAsset={this.updateActiveAsset} />
+  </Grid.Row> */
 
