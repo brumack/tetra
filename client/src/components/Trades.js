@@ -36,16 +36,11 @@ class Trades extends React.Component {
     }
   }
 
-  handleChange = e => {
-    console.log(e.target.value)
-    this.setState({ quantity: e.target.value })
-  }
+  handleChange = e => this.setState({ quantity: e.target.value })
 
 
   handleRemove = e => {
     e.preventDefault()
-    console.log('clicked')
-    console.log(this.state.activeAsset)
     this.props.removeAsset(this.state.activeAsset)
     this.returnInitialState()
     this.props.hideForm()

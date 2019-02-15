@@ -5,7 +5,7 @@ import '../css/MobileMessage.css'
 
 const MobileMessage = () => {
   return (
-    <Container id='messageContainer'>
+    <Container id='mobileMessageContainer'>
       <Message id='mobileMessage'>
         <Image centered src={logo} size='tiny' alt='logo' />
         <Header as='h1'>Mobile still in development!</Header>

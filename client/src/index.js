@@ -135,12 +135,9 @@ class App extends React.Component {
       this.handleError(data.message)
     } else {
       const userAssets = this.state.userAssets
-      const updatedAssets = userAssets.filter(currentAsset => {
-        return asset.asset !== currentAsset.asset
-      })
+      const updatedAssets = userAssets.filter(currentAsset => asset.asset !== currentAsset.asset)
       this.setState({ userAssets: updatedAssets })
     }
-    console.log('remove completed')
   }
 
   getAssetSymbolsAndLogos(assets) {

@@ -30,29 +30,46 @@ export default class Dashboard extends React.Component {
   }
 
   componentWillReceiveProps(newProps) {
-    this.calculateTotalValue()
+
     const { userAssets } = newProps
+    const { assetValues } = this.state
+
+    console.log('pre userassets', userAssets)
+    console.log('pre assetValues', assetValues)
+
+    Object.keys(assetValues).map(asset => {
+      console.log(userAssets)
+      if (userAssets.map(userAsset => userAsset.asset).indexOf(asset) === -1)
+        assetValues[asset] = 0
+    })
+
+    console.log('post assetValues', assetValues)
+
+    this.calculateTotalValue(assetValues)
+    this.setState({ assetValues })
+
     if (userAssets !== this.state.userAssets) {
       this.setState({ userAssets })
     }
+
   }
 
   handleReturnedValues = asset => {
     const { assetValues } = this.state
     assetValues[asset.name] = asset.value
+    console.log('from handle', assetValues)
+    this.calculateTotalValue(assetValues)
     this.setState({ assetValues })
-    this.calculateTotalValue()
   }
 
   updateActiveAsset = activeAsset => this.setState({ activeAsset })
 
-  hideForm = () => {
-    this.setState({ activeAsset: {} })
-  }
+  hideForm = () => this.setState({ activeAsset: {} })
 
-  calculateTotalValue() {
-    if (Object.values(this.state.assetValues).length > 0) {
-      const portfolioValue = Object.values(this.state.assetValues).reduce((a, b) => a + b).toFixed(2)
+  calculateTotalValue(assetValues) {
+    if (Object.keys(assetValues).length > 0) {
+      const portfolioValue = Object.values(assetValues).reduce((a, b) => a + b).toFixed(2)
+      console.log(portfolioValue)
       this.setState({ portfolioValue })
     }
   }

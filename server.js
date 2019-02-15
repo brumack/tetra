@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')))
 
 mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true })
-//mongoose.connect('mongodb://127.0.0.1:27017/tetra', { useNewUrlParser: true })
+// mongoose.connect('mongodb://127.0.0.1:27017/tetra', { useNewUrlParser: true })
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`))
