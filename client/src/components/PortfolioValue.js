@@ -5,8 +5,8 @@ import '../css/PortfolioValue.css'
 const PortfolioValue = props => {
   return (
     <div id='portfolioValue'>
-      <Header>Portfolio Value</Header>
-      <Header>${props.portfolioValue}</Header>
+      <Header as='h1'>Portfolio Value</Header>
+      <p>${props.portfolioValue}</p>
     </div>
   )
 }
