@@ -93,7 +93,6 @@
   .ui.stackable.menu .item  {
     width: 75%;
     max-width: 300px;
-    margin: 0 auto;
   }
 
   .ui.stackable.menu .item:last-of-type {

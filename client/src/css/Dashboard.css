@@ -10,6 +10,7 @@
 
 #Dashboard .eleven.wide.column {
     background-image: url('../images/tetraLogoblue.png');
+    background-color: rgba(208,193,149,.8);
     background-repeat: no-repeat;
     background-position: center;
 }
