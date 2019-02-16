@@ -16,7 +16,7 @@ const Welcome = () => {
         <p>
           This project is still in development. The current version allows for asset balance and portfolio value
           tracking. Future additions will include trade record management with balance calculations using LIFO
-          principles. Mobile version also coming soon, along with updated styling.
+          principles.
         </p>
         <Divider />
         <p>Project developed by Bradley Rumack as a work example for potential employers and is free to use.
