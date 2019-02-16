@@ -1,10 +1,17 @@
 #index {
+  background-color:	rgba(208, 193,  149, .8);
   min-height: 100vh;
-  background-color:	rgba(208, 193,  149, .8)
+  background-image: url('./images/tetraLogoblue.png');
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .ui.negative.message {
   margin-bottom: 0;
+}
+
+.ui.grid>row {
+  display: block;
 }
 
 @media only screen and (min-width: 767px) {

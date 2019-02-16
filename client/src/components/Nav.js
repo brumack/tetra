@@ -65,9 +65,9 @@ class Nav extends React.Component {
   render() {
     if (this.state.token !== null) {
       return (
-        <Menu secondary inverted stackable id='Nav'>
+        <Menu secondary stackable inverted id='Nav'>
           <Menu.Item position='left'>
-            <div>
+            <div id='logo'>
               <Image src={logo} size='mini' />
               <Header as='h2'>tetra</Header>
             </div>

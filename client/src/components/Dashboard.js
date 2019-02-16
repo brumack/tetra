@@ -45,7 +45,6 @@ export default class Dashboard extends React.Component {
     if (userAssets !== this.state.userAssets) {
       this.setState({ userAssets })
     }
-
   }
 
   handleReturnedValues = asset => {
@@ -74,14 +73,8 @@ export default class Dashboard extends React.Component {
 
       return (
         <Grid id='Dashboard'>
-
-          <Grid.Row id='topbar' only='tablet mobile'>
-            <MobileMessage />
-          </Grid.Row>
-
-
-          <Grid.Row only='computer'>
-            <Grid.Column width={5}>
+          <Grid.Row >
+            <Grid.Column width={5} only='computer'>
               <Sidebar
                 addAsset={addAsset}
                 updateAsset={updateAsset}
@@ -93,7 +86,26 @@ export default class Dashboard extends React.Component {
                 hideForm={this.hideForm}
               />
             </Grid.Column>
-            <Grid.Column width={11}>
+            <Grid.Column id='topbar' width={16} only='mobile tablet'>
+              <Topbar
+                addAsset={addAsset}
+                updateAsset={updateAsset}
+                allAssets={allAssets}
+                removeAsset={removeAsset}
+                assetSymbolsAndLogos={assetSymbolsAndLogos}
+                portfolioValue={portfolioValue}
+                activeAsset={activeAsset}
+                hideForm={this.hideForm}
+              />
+            </Grid.Column>
+            <Grid.Column width={11} only='computer'>
+              <Assets
+                userAssets={userAssets}
+                allAssets={allAssets}
+                returnValue={this.handleReturnedValues}
+                updateActiveAsset={this.updateActiveAsset} />
+            </Grid.Column>
+            <Grid.Column width={16} only='tablet mobile'>
               <Assets
                 userAssets={userAssets}
                 allAssets={allAssets}
@@ -109,19 +121,4 @@ export default class Dashboard extends React.Component {
     )
   }
 }
-
-/* <Grid.Row id='topbar' only='tablet mobile'>
-  <Topbar
-    add_asset={addAsset}
-    allAssets={allAssets}
-    portfolioValue={portfolioValue}
-  />
-</Grid.Row>
-  <Grid.Row only='tablet mobile'>
-    <Assets
-      userAssets={userAssets}
-      allAssets={allAssets}
-      returnValue={this.handleReturnedValues}
-      updateActiveAsset={this.updateActiveAsset} />
-  </Grid.Row> */
 

@@ -33,7 +33,7 @@ export default class Assets extends React.Component {
 
   render() {
     if (Object.values(this.state).indexOf(null) === -1 && Object.values(this.state).indexOf(undefined) === -1) {
-      return <Grid container columns={3} padded>{this.renderAssets()}</Grid>
+      return <Grid stackable columns={3} padded>{this.renderAssets()}</Grid>
     }
     return <Loader>Loading</Loader>
   }

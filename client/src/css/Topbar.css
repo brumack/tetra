@@ -1,20 +1,78 @@
-#topbar.mobile.row {
-  margin: 0;
-  height: 100px;
-  background: rgb(26, 30, 48);
-  padding: 20px 0;
+#topbar {
+  padding: 10px 0 5px 0;
+  background-color: rgb(26, 30, 48);
+}
+
+#topbarText {
   text-align: center;
+  width: 66%;
+  display: inline-block;
 }
 
-#topbar .ui.container {
-  width:  100%;
-  
-}
-
-#topbar h3, #topbar h1 {
+#topbarText h3, #topbarText h1 {
   color: white;
-  text-align: center;
-  margin: 0;
-  display: block;
-  width: 100%;
 }
+
+#addButton {
+  display: inline-block;
+}
+
+#topbarText .ui.header {
+  margin: 0;
+} 
+
+#topbar .ui.button {
+  background-color: #2185d0;
+  color: #fff;
+}
+
+#topbar #add {
+  position: relative;
+  height: 60px;
+  width: 60px;
+  bottom: 10px;
+}
+
+#topbar #add i {
+  font-size: 1rem;
+  text-align: center;
+  position: relative;
+  bottom: 5px;
+}
+
+#tradeForm .field>label, 
+#valueForm .field>label,
+.ui.form .field .ui.input input::placeholder  {
+  color:  #2185d0;
+}
+
+input[type='number']::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  -moz-appearance:textfield !important;
+}
+
+#update.ui.button,
+#delete.ui.button,
+#cancel.ui.button {
+  color: white;
+  box-shadow: 3px 3px 3px 3px #000, inset 0 0 10px #000000;
+}
+
+#update.ui.button:hover {
+  box-shadow: 1px 1px 2px #000, inset 0 0 13px #000000;
+}
+
+#update.ui.button {
+  background-color: #2185d0;
+}
+
+#cancel.ui.button {
+  background-color: rgb(31, 31, 31);
+}
+
+#delete.ui.button {
+  background-color: rgb(151, 1, 1);
+}
+
+

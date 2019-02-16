@@ -109,7 +109,7 @@ class App extends React.Component {
         this.handleError(data.message)
       } else {
         const newAsset = { asset, trades: [], quantity: 0, quantityOnly: true }
-        this.setState({ userAssets: [...this.state.userAssets, newAsset] })
+        this.setState({ userAssets: [newAsset, ...this.state.userAssets] })
       }
     } else {
       this.handleError('Error adding asset')

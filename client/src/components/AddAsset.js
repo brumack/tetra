@@ -55,7 +55,7 @@ export default class AddAsset extends React.Component {
                 />
               </Form.Field>
               <Button
-                id='addButton'
+                id='addAsset'
                 positive
                 icon='plus'
                 disabled={this.state.disableButton}
