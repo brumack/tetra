@@ -102,6 +102,12 @@
 }
 
 @media only screen and (min-width: 767px) {
+
+  html {
+    overflow-y: hidden;
+    overscroll-behavior: none;
+
+  }
   #Nav .item {
     padding-right: 8px;
     padding-left: 0px;
