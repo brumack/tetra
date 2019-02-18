@@ -8,9 +8,13 @@
   padding: 0;
 }
 
+#Dashboard > div > div.computer.only.five.wide.column {
+ padding-right: 0;
+}
+
 #Dashboard .eleven.wide.column {
     background-image: url('../images/tetraLogoblue.png');
-    background-color: rgba(208,193,149,.8);
+    background-color: rgba(208,193,149);
     background-repeat: no-repeat;
     background-position: center;
 }
