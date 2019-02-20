@@ -26,6 +26,10 @@
   color: #fff;
 }
 
+#add {
+  margin: 0;
+}
+
 #topbar #add {
   position: relative;
   height: 60px;
