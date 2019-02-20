@@ -73,21 +73,9 @@ export default class Dashboard extends React.Component {
 
       return (
         <Grid id='Dashboard'>
-          <Grid.Row >
-            <Grid.Column width={5} only='computer'>
+          <Grid.Row only='computer'>
+            <Grid.Column width={5}>
               <Sidebar
-                addAsset={addAsset}
-                updateAsset={updateAsset}
-                allAssets={allAssets}
-                removeAsset={removeAsset}
-                assetSymbolsAndLogos={assetSymbolsAndLogos}
-                portfolioValue={portfolioValue}
-                activeAsset={activeAsset}
-                hideForm={this.hideForm}
-              />
-            </Grid.Column>
-            <Grid.Column id='topbar' width={16} only='mobile tablet'>
-              <Topbar
                 addAsset={addAsset}
                 updateAsset={updateAsset}
                 allAssets={allAssets}
@@ -104,6 +92,20 @@ export default class Dashboard extends React.Component {
                 allAssets={allAssets}
                 returnValue={this.handleReturnedValues}
                 updateActiveAsset={this.updateActiveAsset} />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row id='mobileRow' only='mobile tablet'>
+            <Grid.Column id='topbar' width={16}>
+              <Topbar
+                addAsset={addAsset}
+                updateAsset={updateAsset}
+                allAssets={allAssets}
+                removeAsset={removeAsset}
+                assetSymbolsAndLogos={assetSymbolsAndLogos}
+                portfolioValue={portfolioValue}
+                activeAsset={activeAsset}
+                hideForm={this.hideForm}
+              />
             </Grid.Column>
             <Grid.Column width={16} only='tablet mobile'>
               <Assets

@@ -8,7 +8,11 @@
   padding: 0;
 }
 
-#Dashboard > div > div.computer.only.five.wide.column {
+#mobileRow {
+  display: block;
+}
+
+#Dashboard > div.computer.only.row > div.five.wide.column {
  padding-right: 0;
 }
 

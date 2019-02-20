@@ -1,6 +1,7 @@
 #topbar {
   padding: 10px 0 5px 0;
   background-color: rgb(26, 30, 48);
+  max-height: 200px;
 }
 
 #topbarText {
@@ -75,4 +76,13 @@ input[type='number']::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-bu
   background-color: rgb(151, 1, 1);
 }
 
+#topbarHeader {
+  font-family: Teko;
+}
+
+#topbarValue {
+  font-family: Roboto;
+  color: white;
+  font-size: 2.5rem;
+}
 

@@ -112,7 +112,7 @@ class Trades extends React.Component {
         </Form>
       )
     } else {
-      return <div></div>
+      return null
     }
 
   }
