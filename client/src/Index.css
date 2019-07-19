@@ -1,21 +1,21 @@
 #index {
-  background-color:	rgba(208, 193,  149, .8);
-  min-height: 100vh;
-  background-image: url('./images/tetraLogoblue.png');
-  background-repeat: no-repeat;
-  background-position: center;
+	background-color: rgb(181, 198, 255);
+	min-height: 100vh;
+	background-image: url('./images/tetraLogoblue.png');
+	background-repeat: no-repeat;
+	background-position: center;
 }
 
 .ui.negative.message {
-  margin-bottom: 0;
+	margin-bottom: 0;
 }
 
-.ui.grid>row {
-  display: block;
+.ui.grid > row {
+	display: block;
 }
 
 @media only screen and (min-width: 767px) {
-  body {
-    overflow-y: hidden
-  }
+	body {
+		overflow-y: hidden;
+	}
 }

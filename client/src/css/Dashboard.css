@@ -1,24 +1,24 @@
 #Dashboard {
-  height: 100%;
-  min-height: 100vh;
-  margin-top: 0;
+	height: 100%;
+	min-height: 100vh;
+	margin-top: 0;
 }
 
 #Dashboard .row {
-  padding: 0;
+	padding: 0;
 }
 
 #mobileRow {
-  display: block;
+	display: block;
 }
 
 #Dashboard > div.computer.only.row > div.five.wide.column {
- padding-right: 0;
+	padding-right: 0;
 }
 
 #Dashboard .eleven.wide.column {
-    background-image: url('../images/tetraLogoblue.png');
-    background-color: rgba(208,193,149);
-    background-repeat: no-repeat;
-    background-position: center;
+	background-image: url('../images/tetraLogoblue.png');
+	background-color: rgb(181, 198, 255);
+	background-repeat: no-repeat;
+	background-position: center;
 }
