@@ -1,440 +1,222 @@
 const router = require('express').Router()
-const User = require('../models/User')
+const _ = require('lodash')
+const { User } = require('../models/User')
+const Asset = require('../lib/Asset')
 const UserSession = require('../models/UserSession')
 const bodyParser = require('body-parser')
+const isLoggedIn = require('../middleware/isLoggedIn')
+const { userExists, serverError, invalidInfo, invalidCredentials } = require('../lib/serverResponses')
+let client
 
 router.use(bodyParser.json())
 
-router.post('/new', (req, res) => {
+router.post('/new', async (req, res) => {
   const { body } = req
   let { email, password, verifyPassword } = body
-  email = email.toLowerCase()
   const emailCheck = new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 
-  if (!email) {
-    return res.send({
-      success: false,
-      message: 'Email address required.'
-    })
+  if (!email) return invalidInfo(res, 'Email address required.')
+  if (!password) return invalidInfo(res, 'Password Required.')
+  if (!verifyPassword) return invalidInfo(res, 'Passwords do not match.')
+  if (email.toLowerCase().search(emailCheck) !== 0) return invalidInfo(res, 'Invalid email address.')
+  if (password.length < 8) return invalidInfo(res, 'Invalid password. Password must be 8 characters or longer.')
+  if (password !== verifyPassword) invalidInfo(res, 'Passwords do not match.')
+    
+
+  try {
+    const user = await User.findOne({ email }).exec()
+    if (!_.isNull(user)) return userExists(res)
+  } catch (e) {
+    console.log('error finding user', e)
+    return serverError(res)
   }
 
-  if (!password) {
-    return res.send({
-      success: false,
-      message: 'Password Required.'
-    })
+  let user
+
+  try {
+    user = new User({ email })
+    user.password = user.generateHash(password)
+    await user.save()
+  } catch(e) {
+    console.log('error creating user', e)
+    return serverError(res)
   }
-
-  if (!verifyPassword) {
+  
+  try {
+    const userSession = new UserSession({ userId: user._id})
+    const session = await userSession.save()
     return res.send({
-      success: false,
-      message: 'Passwords do not match.'
+      success: true,
+      message: 'New User Created.',
+      token: session._id,
+      email
     })
+  } catch (e) {
+    console.log('error creating session', e)
+    return serverError(res)
   }
-
-  // email address not valid (regex)
-  if (email.search(emailCheck) !== 0) {
-    return res.send({
-      success: false,
-      message: 'Invalid email address.'
-    })
-  }
-
-  if (password.length < 8) {
-    return res.send({
-      success: false,
-      message: 'Invalid password. Password must be 8 characters or longer.'
-    })
-  }
-
-  if (password !== verifyPassword) {
-    return res.send({
-      success: false,
-      message: 'Passwords do not match.'
-    })
-  }
-
-  User.find({ email }, (err, users) => {
-    if (err) {
-      return res.end({
-        success: false,
-        message: 'Server error.'
-      })
-    }
-
-    if (users.length > 0) {
-      return res.send({
-        success: false,
-        message: 'Account already exists. Please try again.'
-      })
-    }
-
-    const newUser = new User()
-    newUser.email = email
-    newUser.password = newUser.generateHash(password)
-    newUser.save((err, user) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Server error'
-        })
-      }
-      const userSession = new UserSession()
-      userSession.userId = user._id
-      userSession.save((err, doc) => {
-        if (err) {
-          return res.send({
-            success: false,
-            message: 'Server error.'
-          })
-        }
-
-        return res.send({
-          success: true,
-          message: 'New User Created.',
-          token: doc._id,
-          email
-        })
-      })
-    })
-  })
 })
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
   const { body } = req
   let { email, password } = body
 
-  if (!email) {
-    return res.send({
-      success: false,
-      message: 'Email address required.'
-    })
-  }
-
-  if (!password) {
-    return res.send({
-      success: false,
-      message: 'Password Required'
-    })
-  }
-
+  if (!email) return invalidInfo(res, 'Email address required.')
+  if (!password) return invalidInfo(res, 'Password Required')
+  
   email = email.toLowerCase()
+  let user = null
 
-  User.find({ email }, (err, users) => {
-    if (err) {
-      return res.end({
-        success: false,
-        message: 'Server error.'
-      })
-    }
+  try {
+    user = await User.findOne({ email }).exec()
+  } catch (e) {
+    return serverError(res)
+  }
 
-    if (users.length !== 1) {
-      return res.send({
-        success: false,
-        message: 'Invalid credentials. Please try again.'
-      })
-    }
+  if (_.isNull(user)|| !user.validatePassword(password)) return invalidCredentials(res)
 
-    const user = users[0]
-    if (!user.validatePassword(password)) {
-      return res.send({
-        success: false,
-        message: 'Invalid credentials. Please try again.'
-      })
-    }
+  const userSession = new UserSession({ userId: user._id })
+  let session = null
 
-    const userSession = new UserSession()
-    userSession.userId = user._id
-    userSession.save((err, doc) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Server error.'
-        })
-      }
+  try {
+    session = await userSession.save()
+  } catch (e) {
+    return serverError(res)
+  }
 
-      return res.send({
-        success: true,
-        message: 'Login successfull.',
-        token: doc._id,
-        email
-      })
+  if (session === userSession)
+    return res.status(200).json({
+      success: true,
+      message: 'Login successfull.',
+      token: session._id
     })
+  
+  return serverError(res)
+})
+
+router.get('/verify', isLoggedIn, (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'Valid session'
   })
 })
 
-router.get('/verify', (req, res) => {
-  const { query } = req
-  const { token } = query
+router.get('/assets', isLoggedIn, async (req, res) => {
+  let { user } = req
 
-  if (token.match(/^[0-9a-fA-F]{24}$/)) {
-    UserSession.find({ _id: token, isDeleted: false }, (err, sessions) => {
-      if (err) {
-        console.log(err)
-        return res.send({
-          success: false,
-          message: 'Error: Server error.'
-        })
-      }
+  try {
+    user = await User.findById(req.user._id).exec()
+  } catch (e) {
+    console.log('Error retrieving user assets.', e)
+    return serverError()
+  }
+  
+  return res.status(200).json({
+    success: true,
+    data: user.assets
+  })   
+})
 
-      if (sessions.length !== 1) {
-        return res.send({
-          success: false,
-          message: 'Error: Invalid session'
-        })
-      }
+router.post('/assets', isLoggedIn, async (req, res) => {
+  const { body, user } = req
+  const { symbol, exchange, balance } = body
+  let asset = null, updatedUser = null
 
-      return res.send({
+  if (!symbol) return invalidInfo(res, 'Please provide an asset to add.')
+
+  const upperSymbol = symbol.toUpperCase()
+  const pair = upperSymbol === 'BTC' ? 'BTCUSDT' : `${upperSymbol}BTC`
+
+  if (!user.assets.map(userAsset => userAsset.symbol).includes(symbol)) {
+    try {
+      const exchanges = await client.hkeysAsync(pair)
+      if (exchanges.includes(exchange)) {
+        asset = new Asset({ symbol, exchange })
+        asset.symbol = symbol
+        asset.exchange = exchange
+        asset.balance = balance || 0
+      } else return invalidInfo(res, 'Unable to add asset. Not supported by selected exchange.')
+    } catch (e) {
+      console.log(`Unable to retrive asset exchanges for ${symbol}.`, e)
+      return serverError(res)
+    }
+    
+    try {
+      updatedUser = await User.updateOne({ _id: user._id }, { $push: { 'assets': asset } }).exec()
+    } catch (e) {
+      console.log('Error updating user assets.', e)
+      return serverError(res)
+    }
+
+    if (updatedUser) {
+      return res.status(200).json({
         success: true,
-        message: 'Valid session'
+        message: 'Asset added.'
       })
+    }
+  
+  } else return invalidInfo(res, 'Asset already added.')
+})
+
+router.put('/assets', isLoggedIn, async (req, res) => {
+  const { body, user } = req
+  const { symbol, exchange, balance } = body
+  const assetIndex = user.assets.map(userAsset => userAsset.symbol).indexOf(symbol)
+  
+  if (assetIndex !== -1) {
+    user.assets[assetIndex] = { symbol, exchange, balance }
+    let updatedUser = null
+
+    try {
+      updatedUser = await User.updateOne({ _id: user._id }, { $set: { 'assets': user.assets } }).exec()
+    } catch(e) {
+      return serverError(res)
+    }
+
+    if (_.isNull(updatedUser)) return serverError(res)
+    return res.status(200).json({ success: true, message: 'Asset updated.' })
+  } else return invalidInfo(res, 'Asset unowned. Please add.')
+})
+
+router.delete('/assets', isLoggedIn, async (req, res) => {
+  const { query, user } = req
+  const { symbol } = query
+
+  const updatedAssets = user.assets.filter(userAsset => userAsset.symbol !== symbol)
+
+  try {
+    await User.updateOne({ _id: user._id }, { $set: { 'assets': updatedAssets } }).exec()
+    return res.status(200).json({
+      success: true,
+      message: 'Asset removed.'
     })
-  } else {
-    return res.send({
-      success: false,
-      message: 'Error: Invalid token.'
-    })
+  } catch (e) {
+    return serverError(res)
   }
 })
 
-router.get('/assets', (req, res) => {
+router.get('/logout', async (req, res) => {
   const { query } = req
   const { token } = query
 
-  if (token.match(/^[0-9a-fA-F]{24}$/)) {
-    UserSession.find({ _id: token, isDeleted: false }, (err, sessions) => {
-      if (err) {
-        return res.send({
-          success: false,
-          message: 'Error: Server error.'
-        })
-      }
-
-      if (sessions.length !== 1) {
-        return res.send({
-          success: false,
-          message: 'Error: Invalid session'
-        })
-      }
-
-      const session = sessions[0]
-
-      User.find({ _id: session.userId }, (err, users) => {
-        if (err) {
-          return res.send({
-            success: false,
-            message: 'Error: Server error.'
-          })
-        }
-
-        const user = users[0]
-        const assetArray = user.assets
-
-        return res.send({
-          success: true,
-          data: assetArray
-        })
-      })
-    })
-  } else {
-    return res.send({
-      success: false,
-      message: 'Error: Invalid token.'
-    })
+  try {
+    await UserSession.findOneAndUpdate({
+      _id: token,
+      isDeleted: false
+    },{
+      $set: { isDeleted: true }
+    }).exec()
+  } catch(e) {
+    return serverError(res)
   }
+
+  return res.status(200).json({
+    success: true,
+    message: 'Logged out.'
+  })
 })
 
-router.post('/assets', (req, res) => {
-  const { body } = req
-  const { token, asset } = body
-  if (!token) {
-    res.send({
-      success: false,
-      message: 'Invalid token.'
-    })
-  } else if (token.match(/^[0-9a-fA-F]{24}$/)) {
-    const session = UserSession.find({ _id: token, isDeleted: false }).exec()
-    session.then(doc => {
-      if (doc.length < 1) {
-        res.send({
-          success: false,
-          message: 'Invalid session.'
-        })
-      } else {
-        const foundUser = User.find({ _id: doc[0].userId, isDeleted: false }).exec()
-        foundUser.then(doc => {
-          if (!doc[0]) {
-            res.send({
-              success: false,
-              message: 'Server error.'
-            })
-          } else {
-            const user = doc[0]
-            if (user.assets.map(userAsset => userAsset.asset).indexOf(asset) === -1) {
-              const newAsset = {
-                'asset': asset,
-                trades: [],
-                quantity: 0,
-                quantityOnly: true
-              }
-              User.updateOne({ _id: user._id }, { $push: { 'assets': newAsset } }, (err, result) => {
-                if (err) {
-                  res.send({
-                    success: false,
-                    message: 'Server error.'
-                  })
-                } else {
-                  res.send({
-                    success: true,
-                    message: 'Asset added.'
-                  })
-                }
-              })
-            } else {
-              res.send({
-                success: false,
-                message: 'Asset already added.'
-              })
-            }
-          }
-        })
-      }
-    })
-  } else {
-    res.send({
-      success: false,
-      message: 'Invalid token.'
-    })
-  }
-})
-
-router.put('/assets', (req, res) => {
-  const { body } = req
-  const { token, asset } = body
-  if (!token) {
-    res.send({
-      success: false,
-      message: 'Invalid token.'
-    })
-  } else if (token.match(/^[0-9a-fA-F]{24}$/)) {
-    const session = UserSession.find({ _id: token, isDeleted: false }).exec()
-    session.then(doc => {
-      if (doc.length < 1) {
-        res.send({ success: false, message: 'Invalid session.' })
-      } else {
-        const foundUser = User.find({ _id: doc[0].userId, isDeleted: false }).exec()
-        foundUser.then(doc => {
-          if (!doc[0]) {
-            res.send({ success: false, message: 'Server error.' })
-          } else {
-            const user = doc[0]
-            const assetIndex = user.assets.map(userAsset => userAsset.asset).indexOf(asset.asset)
-            if (assetIndex !== -1) {
-              const filteredAssets = user.assets.filter(userAsset => userAsset.asset !== asset.asset)
-              filteredAssets.push(asset)
-              User.updateOne({ _id: user._id }, { $set: { 'assets': filteredAssets } }, (err, result) => {
-                if (err) {
-                  res.send({ success: false, message: 'Server error.' })
-                } else {
-                  res.send({ success: true, message: 'Asset updated.', data: filteredAssets })
-                }
-              })
-            } else res.send({ success: false, message: 'Asset not owned by user.' })
-          }
-        })
-      }
-    })
-  } else {
-    res.send({ success: false, message: 'Invalid token.' })
-  }
-})
-
-router.delete('/assets', (req, res) => {
-  const { query } = req
-  const { token, asset } = query
-
-  if (token && token.match(/^[0-9a-fA-F]{24}$/)) {
-    const session = UserSession.find({ _id: token, isDeleted: false }).exec()
-    session.then(doc => {
-      if (doc.length < 1) {
-        res.send({
-          success: false,
-          message: 'Invalid session.'
-        })
-      } else {
-        const foundUser = User.find({ _id: doc[0].userId, isDeleted: false }).exec()
-        foundUser.then(doc => {
-          if (!doc[0]) {
-            res.send({
-              success: false,
-              message: 'Server error.'
-            })
-          } else {
-            const user = doc[0]
-            if (user.assets.map(asset => asset.asset).indexOf(asset) !== -1) {
-              User.updateOne({ _id: user._id }, { '$pull': { 'assets': { 'asset': asset } } }, (err, result) => {
-                if (err) {
-                  res.send({
-                    success: false,
-                    message: 'Server error.'
-                  })
-                } else {
-                  res.send({
-                    success: true,
-                    message: 'Asset removed.'
-                  })
-                }
-              })
-            } else {
-              res.send({
-                success: false,
-                message: 'Asset not available to remove.'
-              })
-            }
-          }
-        })
-      }
-    })
-  } else {
-    res.send({
-      success: false,
-      message: 'Invalid token.'
-    })
-  }
-})
-
-router.get('/logout', (req, res) => {
-  const { query } = req
-  const { token } = query
-
-  if (token.match(/^[0-9a-fA-F]{24}$/)) {
-    UserSession.findOneAndUpdate(
-      {
-        _id: token,
-        isDeleted: false
-      },
-      {
-        $set: { isDeleted: true }
-      },
-      err => {
-        if (err) {
-          return res.send({
-            success: false,
-            message: 'Error: Server error.'
-          })
-        }
-
-        return res.send({
-          success: true,
-          message: 'Logged out.'
-        })
-      })
-  } else {
-    return res.send({
-      success: false,
-      message: 'Error: Invalid token.'
-    })
-  }
-})
-
-module.exports = router
+module.exports = {
+  router,
+  setClient : function(inClient) { client = inClient }
+}

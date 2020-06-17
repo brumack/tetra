@@ -1,7 +1,7 @@
-import cc from '../apis/cc'
+import local from '../apis/local'
 
-export function getPrice(asset, callback) {
-  cc.get(`/price?fsym=${asset}&tsyms=USD`).then(response => {
+export function getPrice(asset, token, callback) {
+  local.get(`assets/last?asset=${asset}&exchange=binance&token=${token}`).then(response => {
     callback(response.data)
   }).catch(err => {
     console.log(err)

@@ -16,8 +16,8 @@ router.post('/trades', (req, res) => {
 router.put('/trades/:asset', (req, res) => {
   console.log(req.body)
 
-  router.delete('/trades/:asset', (req, res) => {
-    console.log(req.query)
-  })
+router.delete('/trades/:asset', (req, res) => {
+  console.log(req.query)
+})
 
-  module.exports = router
+module.exports = router

@@ -12,24 +12,29 @@
 		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm install terser@3.14.1 --prefix client && npm run build --prefix client"
 	},
 	"dependencies": {
-		"async-request": "^1.2.0",
-		"bcrypt": "^3.0.4",
-		"body-parser": "^1.18.3",
-		"express": "^4.16.4",
-		"lodash": "^4.17.11",
-		"mongoose": "^5.4.10",
-		"morgan": "^1.9.1",
-		"passport": "^0.4.0",
+		"async-request": "github:brumack/async-request#lodash-update",
+		"axios": "^0.19.2",
+		"bcrypt": "^3.0.8",
+		"bluebird": "^3.7.2",
+		"body-parser": "^1.19.0",
+		"dotenv": "^8.2.0",
+		"express": "^4.17.1",
+		"lodash": "^4.17.15",
+		"mongoose": "^5.9.19",
+		"morgan": "^1.10.0",
+		"passport": "^0.4.1",
 		"passport-local": "^1.0.0",
 		"passport-local-mongoose": "^5.0.1",
-		"react": "^16.8.1",
-		"react-dom": "^16.8.1",
-		"react-slidedown": "^2.0.7",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"react-slidedown": "^2.4.5",
+		"redis": "^3.0.2",
 		"semantic-ui-css": "^2.4.1",
-		"semantic-ui-react": "^0.85.0"
+		"semantic-ui-react": "^0.85.0",
+		"ws": "^7.3.0"
 	},
 	"devDependencies": {
-		"concurrently": "^4.1.0",
-		"terser": "^3.16.1"
+		"concurrently": "^4.1.2",
+		"terser": "^3.17.0"
 	}
 }

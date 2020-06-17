@@ -112,7 +112,9 @@ export default class Dashboard extends React.Component {
                 userAssets={userAssets}
                 allAssets={allAssets}
                 returnValue={this.handleReturnedValues}
-                updateActiveAsset={this.updateActiveAsset} />
+                updateActiveAsset={this.updateActiveAsset}
+                token={this.props.token} 
+              />
             </Grid.Column>
           </Grid.Row>
         </Grid >

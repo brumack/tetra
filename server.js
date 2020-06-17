@@ -1,18 +1,36 @@
+require('dotenv').config()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const express = require('express')
 const app = express()
 const path = require('path')
-const apiRoutes = require('./routes/apiRoutes')
 const userRoutes = require('./routes/userRoutes')
+const assetRoutes = require('./routes/assetRoutes')
+const binanceStream = require('./lib/binanceStream')
+const getAssetData = require('./lib/getAssetData')
 
-app.use('/api', apiRoutes)
-app.use('/api/users', userRoutes)
+const redis = require('redis')
+const bluebird = require('bluebird')
+bluebird.promisifyAll(redis)
+const client = redis.createClient();
+
+client.on("error", function(error) {
+  console.error('Redis error', error);
+});
+
+userRoutes.setClient(client)
+assetRoutes.setClient(client)
+binanceStream.setClient(client)
+
+binanceStream.createSocket()
+// getAssetData()
+
+app.use('/api/users', userRoutes.router)
+app.use('/api/assets', assetRoutes.router)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'client/build')))
 
-mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true })
-// mongoose.connect('mongodb://127.0.0.1:27017/tetra', { useNewUrlParser: true })
+mongoose.connect(process.env.DATABASEURL, { useNewUrlParser: true, useUnifiedTopology: true })
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${__dirname}/client/build/index.html`))

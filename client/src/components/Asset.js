@@ -34,8 +34,9 @@ class Asset extends React.Component {
   getValues = async () => {
     const { returnValue } = this.props
     const { asset, quantity } = this.props.asset
-    getPrice(asset, (response) => {
-      const { USD } = response
+    getPrice(asset, this.props.token, (response) => {
+      console.log(response)
+      const USD = response.data
       if (USD) {
         const value = USD * quantity
         returnValue({ name: asset, value: value })
@@ -63,7 +64,7 @@ class Asset extends React.Component {
           <Image circular floated='right' size='tiny' src={logo} />
           <Card.Content floated='left'>
             <Card.Header className='ticker'>{asset.asset.toLowerCase()}</Card.Header>
-            <Card.Meta className='price'>${USD.toFixed(2)}</Card.Meta>
+            <Card.Meta className='price'>${USD}</Card.Meta>
             <Card.Meta className='quantity'>{Number(quantity)}</Card.Meta>
             <Card.Meta className='value'>${(quantity * USD).toFixed(2)}</Card.Meta>
           </Card.Content>

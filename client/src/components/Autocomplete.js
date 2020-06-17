@@ -139,7 +139,7 @@ class Autocomplete extends Component {
                   key={suggestion}
                   onClick={onClick}
                 >
-                  <AutoImage src={`https://cryptocompare.com${this.props.asset_symbols_and_logos[suggestion]}`} suggestion={suggestion} />
+                  <AutoImage src={`/logo?asset=${suggestion}`} suggestion={suggestion} />
                 </li>
               );
             }).slice(0, 10)}
@@ -170,5 +170,3 @@ class Autocomplete extends Component {
 }
 
 export default Autocomplete;
-
-//                   <Image src={`https://cryptocompare.com${this.props.asset_symbols_and_logos[suggestion]}`} avatar />
